@@ -19,3 +19,9 @@ Clone the repo:
 * When you finish a ToDo that's assigned to you, and you think it's ready to go into the develop branch, then navigate [HERE](https://github.com/partlows/SEProject-GroceryGuru/compare) to create a new pull request. 
 * This will compare your branch with the develop branch. Enter the information that you want to give, and add the recipents to the pull   request and it will send out a message asking the recipients to view your code. 
 * Once it gets approval from one of the recipients it will be merged into the develop branch. This is just a little safeguard, and         it helps get another pair or pairs of eyes looking at what you've done
+
+***Things to Remember While Coding***
+* Don't push anything that you didn't work on. Some files get modified because of updates to the ide or whatnot, so if you didn't touch   a file don't push it.
+* Merge conflicts will happen, and it's a good thing to know how to handle those. Merge conflicts happen when a a file is modified by     two different developers.
+* You have to solve this before any pulling or pushing happens, and a lot of git tools will have built in merge conflict resolution.
+* Just make sure you don't overwrite what the other person did

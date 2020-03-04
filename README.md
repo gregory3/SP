@@ -4,7 +4,9 @@ My senior project for WIT SE class with group.
 ***FIRST STEPS***
 Clone the repo:
 * Hit the clone or download button on the right hand side, and then copy the url.
-* Go to your git management app (I use SourceTree, that's the one I'm most comfortable with), and there should be somewhere where you can either clone, add, or create a local repository. You want to clone this repo, so hit clone. In SourceTree, when originally cloning the project, there is an advanced options tab. Click this and then select the repo you want to push to.
+
+* Go to your git management app (I use SourceTree, that's the one I'm most comfortable with), and there should be somewhere where you can     either clone, add, or create a local repository. You want to clone this repo, so hit clone. In SourceTree, when originally cloning the project, there is an advanced options tab. Click this and then select the repo you want to push to.
+
 * Next it will have you enter the url you copied, along with where you want the repository to be in your file system. Put it wherever you     want and any other information you need to input and clone.
 * Once it is cloned, you will be on the master branch, you do ***NOT*** want to be on the master branch, the master branch is where we will   put things when the sprint is completed.
 * Somewhere in your app you will see a place to view remote branches. Find this place, and look for a branch with your name on it.

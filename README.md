@@ -4,7 +4,9 @@ My senior project for WIT SE class with group.
 ***FIRST STEPS***
 Clone the repo:
 * Hit the clone or download button on the right hand side, and then copy the url.
+
 * Go to your git management app (I use SourceTree, that's the one I'm most comfortable with), and there should be somewhere where you can     either clone, add, or create a local repository. You want to clone this repo, so hit clone. In SourceTree, when originally cloning the project, there is an advanced options tab. Click this and then select the repo you want to push to.
+
 * Next it will have you enter the url you copied, along with where you want the repository to be in your file system. Put it wherever you     want and any other information you need to input and clone.
 * Once it is cloned, you will be on the master branch, you do ***NOT*** want to be on the master branch, the master branch is where we will   put things when the sprint is completed.
 * Somewhere in your app you will see a place to view remote branches. Find this place, and look for a branch with your name on it.
@@ -19,3 +21,9 @@ Clone the repo:
 * When you finish a ToDo that's assigned to you, and you think it's ready to go into the develop branch, then navigate [HERE](https://github.com/partlows/SEProject-GroceryGuru/compare) to create a new pull request. 
 * This will compare your branch with the develop branch. Enter the information that you want to give, and add the recipents to the pull   request and it will send out a message asking the recipients to view your code. 
 * Once it gets approval from one of the recipients it will be merged into the develop branch. This is just a little safeguard, and         it helps get another pair or pairs of eyes looking at what you've done
+
+***Things to Remember While Coding***
+* Don't push anything that you didn't work on. Some files get modified because of updates to the ide or whatnot, so if you didn't touch   a file don't push it.
+* Merge conflicts will happen, and it's a good thing to know how to handle those. Merge conflicts happen when a a file is modified by     two different developers.
+* You have to solve this before any pulling or pushing happens, and a lot of git tools will have built in merge conflict resolution.
+* Just make sure you don't overwrite what the other person did

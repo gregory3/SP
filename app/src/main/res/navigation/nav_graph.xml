@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/createAccount"
-        android:name="com.example.groceryguruapp.createAccount"
-        android:label="@string/createAccount_label"
-        tools:layout="@layout/create_account"/>
+        android:name="com.example.groceryguruapp.CreateAccount"
+        android:label="create_account"
+        tools:layout="@layout/create_account" />
 </navigation>

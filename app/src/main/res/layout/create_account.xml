@@ -58,7 +58,7 @@
 
 
         <Button
-            android:id="@+id/link_signup"
+            android:id="@+id/submit_signup_data"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"

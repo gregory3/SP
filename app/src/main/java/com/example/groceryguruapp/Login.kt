@@ -9,7 +9,7 @@ import android.widget.Button
 import androidx.navigation.fragment.findNavController
 
 
-   class login: Fragment() {
+   class Login: Fragment() {
 
        override fun onCreateView(
            inflater: LayoutInflater, container: ViewGroup?,
@@ -22,14 +22,15 @@ import androidx.navigation.fragment.findNavController
        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
            super.onViewCreated(view, savedInstanceState)
 
-          // view.findViewById<Button>(R.id.btn_login).setOnClickListener {
-               ///goes to home screen
-               ///().navigate(R.id.action_FirstFragment_to_SecondFragment)
+           view.findViewById<Button>(R.id.btn_login).setOnClickListener {
+               //goes to home screen
+               findNavController().navigate(R.id.action_login_to_homePage);
 
-          // }
-               view.findViewById<Button>(R.id.link_signup).setOnClickListener {/////goes to profile
-                   findNavController().navigate(R.id.action_login_to_createAccount)
-               }
+           }
+           view.findViewById<Button>(R.id.link_signup).setOnClickListener {
+               //goes to profile
+               findNavController().navigate(R.id.action_login_to_createAccount)
+           }
 
        }
    }

@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homePage">
+    app:startDestination="@id/login">
 
     <fragment
         android:id="@+id/login"
-        android:name="com.example.groceryguruapp.login"
+        android:name="com.example.groceryguruapp.Login"
         android:label="@string/login_label"
         tools:layout="@layout/login">
         <action
-            android:id="@+id/action_login_to_createAccount"
-            app:destination="@id/createAccount" />
-        <action
             android:id="@+id/action_login_to_homePage"
             app:destination="@id/homePage" />
+        <action
+            android:id="@+id/action_login_to_createAccount"
+            app:destination="@id/createAccount" />
     </fragment>
 
     <fragment

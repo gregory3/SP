@@ -3,26 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/homePage">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.groceryguruapp.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
+        android:id="@+id/createList"
+        android:name="com.example.groceryguruapp.CreateList"
+        android:label="fragment_create_list"
+        tools:layout="@layout/fragment_create_list" />
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.groceryguruapp.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
+        android:id="@+id/homePage"
+        android:name="com.example.groceryguruapp.HomePage"
+        android:label="fragment_home_page"
+        tools:layout="@layout/fragment_home_page" >
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_homePage_to_createList"
+            app:destination="@id/createList" />
     </fragment>
 </navigation>

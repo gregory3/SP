@@ -13,13 +13,20 @@
         <action
             android:id="@+id/action_login_to_createAccount"
             app:destination="@id/createAccount" />
+        <action
+            android:id="@+id/action_login_to_homePage"
+            app:destination="@id/homePage" />
     </fragment>
 
     <fragment
         android:id="@+id/createAccount"
         android:name="com.example.groceryguruapp.CreateAccount"
         android:label="create_account"
-        tools:layout="@layout/create_account" />
+        tools:layout="@layout/create_account" >
+        <action
+            android:id="@+id/action_createAccount_to_homePage"
+            app:destination="@id/homePage" />
+    </fragment>
 
     <fragment
         android:id="@+id/createList"

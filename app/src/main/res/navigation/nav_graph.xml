@@ -6,10 +6,27 @@
     app:startDestination="@id/homePage">
 
     <fragment
+        android:id="@+id/login"
+        android:name="com.example.groceryguruapp.login"
+        android:label="@string/login_label"
+        tools:layout="@layout/login">
+        <action
+            android:id="@+id/action_login_to_createAccount"
+            app:destination="@id/createAccount" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createAccount"
+        android:name="com.example.groceryguruapp.CreateAccount"
+        android:label="create_account"
+        tools:layout="@layout/create_account" />
+
+    <fragment
         android:id="@+id/createList"
         android:name="com.example.groceryguruapp.CreateList"
         android:label="fragment_create_list"
         tools:layout="@layout/fragment_create_list" />
+
     <fragment
         android:id="@+id/homePage"
         android:name="com.example.groceryguruapp.HomePage"

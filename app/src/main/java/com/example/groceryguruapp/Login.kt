@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
-
+import com.example.groceryguruapp.db.SQLiteContract
+import com.example.groceryguruapp.InputValidation
 
    class Login: Fragment() {
+       private val inputValidation: InputValidation =
 
        override fun onCreateView(
            inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +34,10 @@ import androidx.navigation.fragment.findNavController
                findNavController().navigate(R.id.action_login_to_createAccount)
            }
 
+       }
+
+       private fun verifyFromSQLite() {
+           if(!inputValidation)
        }
    }
 

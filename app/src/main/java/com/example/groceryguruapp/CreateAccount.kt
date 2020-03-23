@@ -22,11 +22,11 @@ class CreateAccount: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-         view.findViewById<Button>(R.id.btn_login).setOnClickListener {
+         //view.findViewById<Button>(R.id.btn_login).setOnClickListener {
             //goes to home screen
-            findNavController().navigate(R.id.action_createAccount_to_homePage)
+           // findNavController().navigate(R.id.action_createAccount_to_homePage)
 
-         }
+       //  }
 
 
     }

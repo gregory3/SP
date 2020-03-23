@@ -2,7 +2,7 @@ package com.example.groceryguruapp.db
 
 import android.provider.BaseColumns
 
-object dbschema {
+object DbSchema {
 
     class UserEntry : BaseColumns {
         companion object {

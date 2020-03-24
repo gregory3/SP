@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 import java.util.ArrayList
 
-class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
+class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES)
     }
@@ -24,17 +24,18 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         onUpgrade(db, oldVersion, newVersion)
     }
 
+
     @Throws(SQLiteConstraintException::class)
     fun insertUser(user: DbModels.User): Boolean {
         val db = writableDatabase
 
         val values = ContentValues()
-        values.put(DbSchema.UserEntry.COLUMN_USER_ID, user.userid)
-        values.put(DbSchema.UserEntry.COLUMN_USER_FIRST, user.userfirst)
-        values.put(DbSchema.UserEntry.COLUMN_USER_LAST, user.userlast)
-        values.put(DbSchema.UserEntry.COLUMN_USER_LISTS, user.userlists)
+        values.put(DbContract.UserEntry.COLUMN_USER_ID, user.userid)
+        values.put(DbContract.UserEntry.COLUMN_USER_FIRST, user.userfirst)
+        values.put(DbContract.UserEntry.COLUMN_USER_LAST, user.userlast)
+        values.put(DbContract.UserEntry.COLUMN_USER_LISTS, user.userlists)
 
-        val newRowId = db.insert(DbSchema.UserEntry.TABLE_NAME, null, values)
+        val newRowId = db.insert(DbContract.UserEntry.TABLE_NAME, null, values)
 
         return true
     }
@@ -44,11 +45,11 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
 
         val values = ContentValues()
-        values.put(DbSchema.ListEntry.COLUMN_LIST_ID, userlist.listid)
-        values.put(DbSchema.ListEntry.COLUMN_LIST_NAME, userlist.listname)
-        values.put(DbSchema.ListEntry.COLUMN_LIST, userlist.list)
+        values.put(DbContract.ListEntry.COLUMN_LIST_ID, userlist.listid)
+        values.put(DbContract.ListEntry.COLUMN_LIST_NAME, userlist.listname)
+        values.put(DbContract.ListEntry.COLUMN_LIST, userlist.list)
 
-        val newRowId = db.insert(DbSchema.ListEntry.TABLE_NAME, null, values)
+        val newRowId = db.insert(DbContract.ListEntry.TABLE_NAME, null, values)
 
         return true
     }
@@ -58,11 +59,11 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
 
         val values = ContentValues()
-        values.put(DbSchema.ItemEntry.COLUMN_ITEM_ID, item.itemid)
-        values.put(DbSchema.ItemEntry.COLUMN_ITEM_NAME, item.itemname)
-        values.put(DbSchema.ItemEntry.COLUMN_ITEM_CATEGORY, item.itemcategory)
+        values.put(DbContract.ItemEntry.COLUMN_ITEM_ID, item.itemid)
+        values.put(DbContract.ItemEntry.COLUMN_ITEM_NAME, item.itemname)
+        values.put(DbContract.ItemEntry.COLUMN_ITEM_CATEGORY, item.itemcategory)
 
-        val newRowId = db.insert(DbSchema.ItemEntry.TABLE_NAME, null, values)
+        val newRowId = db.insert(DbContract.ItemEntry.TABLE_NAME, null, values)
 
         return true
     }
@@ -71,10 +72,10 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun deleteList(listid: Long): Boolean {
         val db = writableDatabase
 
-        val selection = DbSchema.ListEntry.COLUMN_LIST_ID + " LIKE ?"
+        val selection = DbContract.ListEntry.COLUMN_LIST_ID + " LIKE ?"
         val selectionArgs = arrayOf(listid.toString())
 
-        db.delete(DbSchema.UserEntry.TABLE_NAME, selection, selectionArgs)
+        db.delete(DbContract.UserEntry.TABLE_NAME, selection, selectionArgs)
 
         return true
     }
@@ -84,8 +85,8 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
         var cursor: Cursor? = null
         try {
-            cursor = db.rawQuery("select * from " + DbSchema.UserEntry.TABLE_NAME + " where " +
-                    DbSchema.UserEntry.COLUMN_USER_ID + " = '" + userid + "'", null)
+            cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME + " where " +
+                    DbContract.UserEntry.COLUMN_USER_ID + " = '" + userid + "'", null)
         } catch(e: SQLiteException) {
             db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()
@@ -97,9 +98,9 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor!!.moveToFirst()) {
             while(!cursor.isAfterLast) {
-                first = cursor.getString(cursor.getColumnIndex(DbSchema.UserEntry.COLUMN_USER_FIRST))
-                last = cursor.getString(cursor.getColumnIndex(DbSchema.UserEntry.COLUMN_USER_LAST))
-                userlists = cursor.getBlob(cursor.getColumnIndex(DbSchema.UserEntry.COLUMN_USER_LISTS))
+                first = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_FIRST))
+                last = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LAST))
+                userlists = cursor.getBlob(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LISTS))
 
                 users.add(DbModels.User(userid, first, last, userlists))
                 cursor.moveToNext()
@@ -113,8 +114,8 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
         var cursor: Cursor? = null
         try {
-            cursor = db.rawQuery("select * from " + DbSchema.ListEntry.TABLE_NAME + " where " +
-                    DbSchema.ListEntry.COLUMN_LIST_ID + " = '" + listid + "'", null)
+            cursor = db.rawQuery("select * from " + DbContract.ListEntry.TABLE_NAME + " where " +
+                    DbContract.ListEntry.COLUMN_LIST_ID + " = '" + listid + "'", null)
         } catch(e: SQLiteException) {
             db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()
@@ -125,8 +126,8 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor!!.moveToFirst()) {
             while(!cursor.isAfterLast) {
-                listname = cursor.getString(cursor.getColumnIndex(DbSchema.ListEntry.COLUMN_LIST_NAME))
-                userlist = cursor.getBlob(cursor.getColumnIndex(DbSchema.ListEntry.COLUMN_LIST))
+                listname = cursor.getString(cursor.getColumnIndex(DbContract.ListEntry.COLUMN_LIST_NAME))
+                userlist = cursor.getBlob(cursor.getColumnIndex(DbContract.ListEntry.COLUMN_LIST))
 
 
                 lists.add(DbModels.UserList(listid, listname, userlist))
@@ -141,7 +142,7 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
         var cursor: Cursor? = null
         try {
-            cursor = db.rawQuery("select * from " + DbSchema.ListEntry.TABLE_NAME, null)
+            cursor = db.rawQuery("select * from " + DbContract.ListEntry.TABLE_NAME, null)
         } catch(e: SQLiteException) {
             db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()
@@ -153,9 +154,9 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor!!.moveToFirst()) {
             while(!cursor.isAfterLast) {
-                listid = cursor.getLong(cursor.getColumnIndex((DbSchema.ListEntry.COLUMN_LIST_ID)))
-                listname = cursor.getString(cursor.getColumnIndex(DbSchema.ListEntry.COLUMN_LIST_NAME))
-                userlist = cursor.getBlob(cursor.getColumnIndex(DbSchema.ListEntry.COLUMN_LIST))
+                listid = cursor.getLong(cursor.getColumnIndex((DbContract.ListEntry.COLUMN_LIST_ID)))
+                listname = cursor.getString(cursor.getColumnIndex(DbContract.ListEntry.COLUMN_LIST_NAME))
+                userlist = cursor.getBlob(cursor.getColumnIndex(DbContract.ListEntry.COLUMN_LIST))
 
 
                 lists.add(DbModels.UserList(listid, listname, userlist))
@@ -170,8 +171,8 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = writableDatabase
         var cursor: Cursor? = null
         try {
-            cursor = db.rawQuery("select * from " + DbSchema.ItemEntry.TABLE_NAME + " where " +
-                    DbSchema.ItemEntry.COLUMN_ITEM_ID + " = '" + itemid + "'", null)
+            cursor = db.rawQuery("select * from " + DbContract.ItemEntry.TABLE_NAME + " where " +
+                    DbContract.ItemEntry.COLUMN_ITEM_ID + " = '" + itemid + "'", null)
         } catch(e: SQLiteException) {
             db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()
@@ -182,8 +183,8 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         if (cursor!!.moveToFirst()) {
             while(!cursor.isAfterLast) {
-                name = cursor.getString(cursor.getColumnIndex(DbSchema.ItemEntry.COLUMN_ITEM_NAME))
-                category = cursor.getString(cursor.getColumnIndex(DbSchema.ItemEntry.COLUMN_ITEM_CATEGORY))
+                name = cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME))
+                category = cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_CATEGORY))
 
 
                 items.add(DbModels.Item(itemid, name, category))
@@ -198,22 +199,22 @@ class SQLiteContract(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val DATABASE_NAME = "FeedReader.db"
 
         private val SQL_CREATE_ENTRIES =
-            "create table " + DbSchema.UserEntry.TABLE_NAME + " (" +
-                    DbSchema.UserEntry.COLUMN_USER_ID + " TEXT PRIMARY KEY, " +
-                    DbSchema.UserEntry.COLUMN_USER_FIRST + " TEXT, " +
-                    DbSchema.UserEntry.COLUMN_USER_LAST + " TEXT, " +
-                    DbSchema.UserEntry.COLUMN_USER_LISTS + " BLOB);" +
-                    "create table " + DbSchema.ListEntry.TABLE_NAME + " (" +
-                    DbSchema.ListEntry.COLUMN_LIST_ID + " TEXT PRIMARY KEY, " +
-                    DbSchema.ListEntry.COLUMN_LIST_NAME + " TEXT, " +
-                    DbSchema.ListEntry.COLUMN_LIST + " BLOB);" +
-                    "create table " + DbSchema.ItemEntry.TABLE_NAME + " (" +
-                    DbSchema.ItemEntry.COLUMN_ITEM_ID + " TEXT PRIMARY KEY, " +
-                    DbSchema.ItemEntry.COLUMN_ITEM_NAME + " TEXT, " +
-                    DbSchema.ItemEntry.COLUMN_ITEM_CATEGORY + "TEXT);"
+            "create table " + DbContract.UserEntry.TABLE_NAME + " (" +
+                    DbContract.UserEntry.COLUMN_USER_ID + " TEXT PRIMARY KEY, " +
+                    DbContract.UserEntry.COLUMN_USER_FIRST + " TEXT, " +
+                    DbContract.UserEntry.COLUMN_USER_LAST + " TEXT, " +
+                    DbContract.UserEntry.COLUMN_USER_LISTS + " BLOB);" +
+                    "create table " + DbContract.ListEntry.TABLE_NAME + " (" +
+                    DbContract.ListEntry.COLUMN_LIST_ID + " TEXT PRIMARY KEY, " +
+                    DbContract.ListEntry.COLUMN_LIST_NAME + " TEXT, " +
+                    DbContract.ListEntry.COLUMN_LIST + " BLOB);" +
+                    "create table " + DbContract.ItemEntry.TABLE_NAME + " (" +
+                    DbContract.ItemEntry.COLUMN_ITEM_ID + " TEXT PRIMARY KEY, " +
+                    DbContract.ItemEntry.COLUMN_ITEM_NAME + " TEXT, " +
+                    DbContract.ItemEntry.COLUMN_ITEM_CATEGORY + "TEXT);"
 
-        private val SQL_DELETE_ENTRIES = "drop table if exists " + DbSchema.UserEntry.TABLE_NAME + ";" +
-                "drop table if exists " + DbSchema.ListEntry.TABLE_NAME + ";" +
-                "drop table if exists " + DbSchema.ItemEntry.TABLE_NAME + ";"
+        private val SQL_DELETE_ENTRIES = "drop table if exists " + DbContract.UserEntry.TABLE_NAME + ";" +
+                "drop table if exists " + DbContract.ListEntry.TABLE_NAME + ";" +
+                "drop table if exists " + DbContract.ItemEntry.TABLE_NAME + ";"
     }
 }

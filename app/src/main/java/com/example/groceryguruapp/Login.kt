@@ -38,10 +38,6 @@ class Login : Fragment() {
        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
            super.onViewCreated(view, savedInstanceState)
 
-           initViews(view);
-           //initListeners();
-           initObjects();
-
            view.findViewById<Button>(R.id.btn_login).setOnClickListener {
                //goes to home screen
                findNavController().navigate(R.id.action_login_to_homePage);
@@ -50,22 +46,6 @@ class Login : Fragment() {
            view.findViewById<Button>(R.id.link_signup).setOnClickListener {
                //goes to profile
                findNavController().navigate(R.id.action_login_to_createAccount)
-           }
-
-       }
-
-       private fun initViews(view: View) {
-           textInputLayoutEmail = view.findViewById<TextInputLayout>(R.id.input_email)
-       }
-
-       private fun initObjects() {
-           sqliteContract = context?.let { DbHelper(it) };
-           inputValidation = context?.let { InputValidation(it) };
-       }
-
-       private fun verifyFromSQLite() {
-           if(!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayout, message)) {
-
            }
 
        }

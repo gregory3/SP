@@ -43,4 +43,17 @@
             android:id="@+id/action_homePage_to_createList"
             app:destination="@id/createList" />
     </fragment>
+    <fragment
+        android:id="@+id/createUserDialog"
+        android:name="com.example.groceryguruapp.CreateUserDialog"
+        android:label="CreateUserDialog" >
+        <action
+            android:id="@+id/action_createUserDialog_to_login"
+            app:destination="@id/login" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity2"
+        android:name="com.example.groceryguruapp.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>

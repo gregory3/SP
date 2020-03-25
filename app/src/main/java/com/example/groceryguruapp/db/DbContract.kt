@@ -8,15 +8,18 @@ object DbContract {
         companion object {
             val TABLE_NAME = "users"
             val COLUMN_USER_ID = "userid"
+            val COLUMN_USER_USERNAME = "username"
             val COLUMN_USER_FIRST  = "userfirst"
             val COLUMN_USER_LAST = "userlast"
             val COLUMN_USER_LISTS = "userlists"
+            val COLUMN_USER_EMAIL = "useremail"
+            val COLUMN_USER_PASSWORD = "userpassword"
         }
     }
 
-    class ListEntry : BaseColumns {
+    class GroceryListEntry : BaseColumns {
         companion object {
-            val TABLE_NAME = "userlists"
+            val TABLE_NAME = "shoppinglist"
             val COLUMN_LIST_ID = "listid"
             val COLUMN_LIST_NAME = "listname"
             val COLUMN_LIST = "list"

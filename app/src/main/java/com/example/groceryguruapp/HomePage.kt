@@ -42,7 +42,7 @@ class HomePage : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.createNewListButton).setOnClickListener {
+        view.findViewById<Button>(R.id.btn_login).setOnClickListener {
             findNavController().navigate(R.id.action_homePage_to_createList);
         }
     }

@@ -17,6 +17,8 @@
     <string name="last_name">Last Name</string>
     <string name="user_name">Username</string>
     <string name="Retype_Password">Retype Password</string>
+    <string name='return_to_login'>Login</string>
+    <string name='on_success_user_create'>User Created Successfully! Return to Login Screen.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

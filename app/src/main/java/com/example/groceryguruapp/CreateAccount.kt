@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import androidx.fragment.app.DialogFragment
 import com.example.groceryguruapp.db.DbHelper
 import com.example.groceryguruapp.db.DbModels
 import com.google.android.material.textfield.TextInputEditText
@@ -31,33 +33,32 @@ class CreateAccount: Fragment() {
 
         dbHelper = DbHelper(context!!);
 
-        view.findViewById<Button>(R.id.btn_login).setOnClickListener {
+        view.findViewById<Button>(R.id.submit_signup_data).setOnClickListener {
             // creates user account
             createUser(view);
-            view.findViewById<TextInputEditText>(R.id.input_username).setText("");
-            view.findViewById<TextInputEditText>(R.id.input_firstname).setText("");
-            view.findViewById<TextInputEditText>(R.id.input_lastname).setText("");
-            view.findViewById<TextInputEditText>(R.id.input_email).setText("");
-            view.findViewById<TextInputEditText>(R.id.input_password).setText("");
-            view.findViewById<TextInputEditText>(R.id.input_re_password).setText("");
-            var dialog: Dialog = Dialog(context!!, android.R.style.Theme_Black_NoTitleBar);
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.argb(100, 0, 0, 0)))
-            dialog.setContentView(R.layout.create_user_dialog);
-            dialog.show();
+            view.findViewById<EditText>(R.id.input_username).setText("");
+            view.findViewById<EditText>(R.id.input_firstname).setText("");
+            view.findViewById<EditText>(R.id.input_lastname).setText("");
+            view.findViewById<EditText>(R.id.input_email).setText("");
+            view.findViewById<EditText>(R.id.input_password).setText("");
+            view.findViewById<EditText>(R.id.input_re_password).setText("");
+
+            var dialog = DialogFragment();
+            dialog.dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.argb(100, 0, 0, 0)))
+            dialog.dialog.setContentView(R.layout.create_user_dialog);
+            dialog.dialog.show();
         }
     }
 
     fun createUser(view: View) {
-        var username = view.findViewById<TextInputEditText>(R.id.input_username).text.toString();
-        var firstName = view.findViewById<TextInputEditText>(R.id.input_firstname).text.toString();
-        var lastName = view.findViewById<TextInputEditText>(R.id.input_lastname).text.toString();
-        var email = view.findViewById<TextInputEditText>(R.id.input_email).text.toString();
-        var password = view.findViewById<TextInputEditText>(R.id.input_password).text.toString();
-        var retryPassword = view.findViewById<TextInputEditText>(R.id.input_re_password).text.toString();
+        var username = view.findViewById<EditText>(R.id.input_username).text.toString();
+        var firstName = view.findViewById<EditText>(R.id.input_firstname).text.toString();
+        var lastName = view.findViewById<EditText>(R.id.input_lastname).text.toString();
+        var email = view.findViewById<EditText>(R.id.input_email).text.toString();
+        var password = view.findViewById<EditText>(R.id.input_password).text.toString();
+        var retryPassword = view.findViewById<EditText>(R.id.input_re_password).text.toString();
 
         if (password.trim().equals(retryPassword.trim())) {
-
-
             var result = dbHelper.insertUser(
                 DbModels.User(
                     0,

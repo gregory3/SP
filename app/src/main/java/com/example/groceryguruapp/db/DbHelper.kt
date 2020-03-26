@@ -68,8 +68,18 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(DbContract.UserEntry.COLUMN_USER_LISTS, user.userlists)
 
         val newRowId = db.insert(DbContract.UserEntry.TABLE_NAME, null, values)
+        // create update call to update user to have rowId as userId
+        val rowId = ContentValues()
+        rowId.put(DbContract.UserEntry.COLUMN_USER_ID, newRowId)
+        values.put(DbContract.UserEntry.COLUMN_USER_USERNAME, user.username)
+        values.put(DbContract.UserEntry.COLUMN_USER_FIRST, user.userfirst)
+        values.put(DbContract.UserEntry.COLUMN_USER_LAST, user.userlast)
+        values.put(DbContract.UserEntry.COLUMN_USER_EMAIL, user.useremail)
+        values.put(DbContract.UserEntry.COLUMN_USER_PASSWORD, user.userpassword)
+        values.put(DbContract.UserEntry.COLUMN_USER_LISTS, user.userlists)
 
-        db.close()
+        db.update(DbContract.UserEntry.TABLE_NAME, rowId, DbContract.UserEntry.COLUMN_USER_USERNAME + " = " + "'" + user.username + "'", null)
+
         return true
     }
 
@@ -108,9 +118,70 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val selection = DbContract.GroceryListEntry.COLUMN_LIST_ID + " LIKE ?"
         val selectionArgs = arrayOf(listid.toString())
 
-        db.delete(DbContract.UserEntry.TABLE_NAME, selection, selectionArgs)
+        db.delete(DbContract.GroceryListEntry.TABLE_NAME, selection, selectionArgs)
 
         return true
+    }
+
+    @Throws(SQLiteConstraintException::class)
+    fun deleteAllUsers(): Boolean {
+        val db = writableDatabase
+
+        db.delete(DbContract.UserEntry.TABLE_NAME, null, null)
+
+        return true
+    }
+
+    fun showAllUsers(): ArrayList<DbModels.User> {
+        val users = ArrayList<DbModels.User>()
+        val db = writableDatabase
+        lateinit var cursor: Cursor
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME, null)
+        } catch(e: SQLiteException){
+            throw e
+        }
+
+        if (cursor.moveToFirst()){
+            while(!cursor.isAfterLast){
+                var userid = cursor.getLong(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_ID))
+                var first = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_FIRST))
+                var last = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LAST))
+                var email = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_EMAIL))
+                var password = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_PASSWORD))
+                var userlists = cursor.getBlob(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LISTS))
+                var username = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_USERNAME))
+
+                users.add(DbModels.User(userid, username, first, last, email, password, userlists))
+                cursor.moveToNext()
+            }
+        }
+        return users
+    }
+
+    fun validateLoginCredentials(email:String, password:String): Boolean {
+        val db = writableDatabase
+
+        lateinit var cursor:Cursor
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME + " where useremail = '" + email + "' AND userpassword = '" + password + "'", null)
+        } catch(e: SQLiteException) {
+            throw e
+        }
+
+        if (cursor.moveToFirst()){
+            while(!cursor.isAfterLast) {
+                var first =
+                    cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_FIRST))
+                var email =
+                    cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_EMAIL))
+                var password =
+                    cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_PASSWORD))
+                cursor.moveToNext()
+            }
+            return true
+        }
+        return false
     }
 
     fun readUser(userid: Long): ArrayList<DbModels.User> {

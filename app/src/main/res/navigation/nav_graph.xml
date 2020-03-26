@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_login_to_createAccount"
             app:destination="@id/createAccount" />
+        <action
+            android:id="@+id/action_login_to_displayDatabaseInformation"
+            app:destination="@id/displayDatabaseInformation" />
     </fragment>
 
     <fragment
@@ -56,4 +59,13 @@
         android:name="com.example.groceryguruapp.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/displayDatabaseInformation"
+        android:name="com.example.groceryguruapp.DisplayDatabaseInformation"
+        android:label="fragment_display_database_information"
+        tools:layout="@layout/fragment_display_database_information" >
+        <action
+            android:id="@+id/action_displayDatabaseInformation_to_login"
+            app:destination="@id/login" />
+    </fragment>
 </navigation>

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.example.groceryguruapp.db.DbHelper
@@ -16,16 +17,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class Login : Fragment() {
-    private var activity: Fragment? = null
-    private var inputValidation: InputValidation? = null
-
-    private var textInputLayoutEmail: TextInputLayout? = null
-    private var textInputLayoutPassword: TextInputLayout? = null
-
-    private var textInputEditTextEmail: TextInputEditText? = null
-    private var textInputEditTextPassword: TextInputEditText? = null
-    private var sqliteContract: DbHelper? = null
-
+    lateinit var dbHelper: DbHelper
 
     override fun onCreateView(
            inflater: LayoutInflater, container: ViewGroup?,
@@ -38,14 +30,30 @@ class Login : Fragment() {
        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
            super.onViewCreated(view, savedInstanceState)
 
+           dbHelper = DbHelper(context!!);
+
+
+
            view.findViewById<Button>(R.id.btn_login).setOnClickListener {
+               var email = view.findViewById<EditText>(R.id.login_input_email).text.toString()
+               var password = view.findViewById<EditText>(R.id.login_input_password).text.toString()
+
                //goes to home screen
-               findNavController().navigate(R.id.action_login_to_homePage);
+               var authenticated = dbHelper.validateLoginCredentials(email, password);
+               if(authenticated){
+                   findNavController().navigate(R.id.action_login_to_homePage);
+               } else {
+                   view.setBackgroundColor(2)
+               }
 
            }
            view.findViewById<Button>(R.id.link_signup).setOnClickListener {
                //goes to profile
                findNavController().navigate(R.id.action_login_to_createAccount)
+           }
+
+           view.findViewById<Button>(R.id.to_display_database_information_btn).setOnClickListener {
+               findNavController().navigate(R.id.action_login_to_displayDatabaseInformation)
            }
 
        }

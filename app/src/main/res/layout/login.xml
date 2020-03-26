@@ -15,7 +15,7 @@
 
 
         <!-- Email Label -->
-            <EditText android:id="@+id/input_email"
+            <EditText android:id="@+id/login_input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -23,7 +23,7 @@
 
 
         <!-- Password Label -->
-            <EditText android:id="@+id/input_password"
+            <EditText android:id="@+id/login_input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -47,6 +47,12 @@
             android:gravity="center"
             android:text="@string/createAccount"
             android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/to_display_database_information_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/to_display_users_page" />
 
     </LinearLayout>
 </ScrollView>

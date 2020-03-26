@@ -58,7 +58,7 @@ class CreateAccount: Fragment() {
         var password = view.findViewById<EditText>(R.id.input_password).text.toString();
         var retryPassword = view.findViewById<EditText>(R.id.input_re_password).text.toString();
 
-        if (password.trim().equals(retryPassword.trim())) {
+        if (password.trim() == retryPassword.trim()) {
             var result = dbHelper.insertUser(
                 DbModels.User(
                     0,

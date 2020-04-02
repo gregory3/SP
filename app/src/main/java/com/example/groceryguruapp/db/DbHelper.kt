@@ -134,7 +134,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
     fun showAllUsers(): ArrayList<DbModels.User> {
         val users = ArrayList<DbModels.User>()
-        val db = writableDatabase
+        val db = readableDatabase
         lateinit var cursor: Cursor
         try {
             cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME, null)
@@ -160,7 +160,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     fun validateLoginCredentials(email:String, password:String): Boolean {
-        val db = writableDatabase
+        val db = readableDatabase
 
         lateinit var cursor:Cursor
         try {
@@ -186,7 +186,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
     fun readUser(userid: Long): ArrayList<DbModels.User> {
         val users = ArrayList<DbModels.User>()
-        val db = writableDatabase
+        val db = readableDatabase
         var cursor: Cursor? = null
         try {
             cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME + " where " +

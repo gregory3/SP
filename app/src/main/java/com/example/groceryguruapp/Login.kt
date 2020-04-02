@@ -42,6 +42,8 @@ class Login : Fragment() {
                var authenticated = dbHelper.validateLoginCredentials(email, password);
                if(authenticated){
                    findNavController().navigate(R.id.action_login_to_homePage);
+                   view.findViewById<EditText>(R.id.login_input_email).setText("");
+                   view.findViewById<EditText>(R.id.login_input_password).setText("");
                } else {
                    view.setBackgroundColor(2)
                }

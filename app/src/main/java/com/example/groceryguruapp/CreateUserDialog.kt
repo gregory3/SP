@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 
 // TODO: Rename parameter arguments, choose names that match
@@ -15,10 +16,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [HomePage.newInstance] factory method to
+ * Use the [CreateUserDialog.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomePage : Fragment() {
+class CreateUserDialog : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -35,15 +36,14 @@ class HomePage : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_page, container, false)
+        return inflater.inflate(R.layout.create_user_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.create_new_list_button).setOnClickListener {
-            findNavController().navigate(R.id.action_homePage_to_createList);
+        view.findViewById<Button>(R.id.return_to_login_button).setOnClickListener {
+            findNavController().navigate(R.id.action_createUserDialog_to_login);
         }
     }
 
@@ -54,12 +54,12 @@ class HomePage : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment HomePage.
+         * @return A new instance of fragment CreateUserDialog.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            HomePage().apply {
+            CreateUserDialog().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -15,30 +15,19 @@
 
 
         <!-- Email Label -->
-        com.google.android.material.textfield.TextInputLayout            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-
-            <EditText
-                android:id="@+id/input_email"
+            <EditText android:id="@+id/login_input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress" />
 
 
         <!-- Password Label -->
-        com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/input_password"
+            <EditText android:id="@+id/login_input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="@string/password"/>
 
 
         <Button
@@ -47,8 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:padding="12dp"
-            android:text="Login"/>
+            android:text="@string/login"
+            android:padding="12dp" />
 
         <Button
             android:id="@+id/link_signup"
@@ -56,8 +45,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:text="No account yet? Create one"
-            android:textSize="16dip" />
+            android:text="@string/createAccount"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/to_display_database_information_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/to_display_users_page" />
 
     </LinearLayout>
 </ScrollView>

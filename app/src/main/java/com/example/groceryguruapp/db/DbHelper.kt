@@ -12,7 +12,8 @@ import java.util.ArrayList
 
 class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
     companion object {
-        val DATABASE_VERSION = 1
+        // increase db version when you add/remove fields + tables
+        val DATABASE_VERSION = 2
         val DATABASE_NAME = "FeedReader.db"
 
         private val SQL_CREATE_ENTRIES =
@@ -23,6 +24,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                     DbContract.UserEntry.COLUMN_USER_LAST + " TEXT, " +
                     DbContract.UserEntry.COLUMN_USER_EMAIL + " TEXT, " +
                     DbContract.UserEntry.COLUMN_USER_PASSWORD + " TEXT, " +
+                    DbContract.UserEntry.COLUMN_USER_ISDEVELOPER + " INTEGER DEFAULT 0, " +
                     DbContract.UserEntry.COLUMN_USER_LISTS + " BLOB);" +
                     "create table " + DbContract.GroceryListEntry.TABLE_NAME + " (" +
                     DbContract.GroceryListEntry.COLUMN_LIST_ID + " TEXT PRIMARY KEY, " +
@@ -66,6 +68,9 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(DbContract.UserEntry.COLUMN_USER_EMAIL, user.useremail)
         values.put(DbContract.UserEntry.COLUMN_USER_PASSWORD, user.userpassword)
         values.put(DbContract.UserEntry.COLUMN_USER_LISTS, user.userlists)
+
+        // Comment this line out after you create a developer user in your local database
+        // values.put(DbContract.UserEntry.COLUMN_USER_ISDEVELOPER, 1);
 
         val newRowId = db.insert(DbContract.UserEntry.TABLE_NAME, null, values)
         // create update call to update user to have rowId as userId
@@ -135,6 +140,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     fun showAllUsers(): ArrayList<DbModels.User> {
         val users = ArrayList<DbModels.User>()
         val db = readableDatabase
+        var isdeveloper = false;
         lateinit var cursor: Cursor
         try {
             cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME, null)
@@ -151,8 +157,10 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 var password = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_PASSWORD))
                 var userlists = cursor.getBlob(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LISTS))
                 var username = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_USERNAME))
+                isdeveloper = cursor.getInt(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_ISDEVELOPER)) > 0
 
-                users.add(DbModels.User(userid, username, first, last, email, password, userlists))
+
+                users.add(DbModels.User(userid, username, first, last, email, password, isdeveloper, userlists))
                 cursor.moveToNext()
             }
         }
@@ -184,6 +192,28 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return false
     }
 
+    fun isDeveloper(email:String): Boolean {
+        val db = readableDatabase
+        var isDeveloper = false
+
+        lateinit var cursor: Cursor
+
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME + " where useremail = '" + email + "'", null)
+        } catch(e: SQLiteException){
+            throw e
+        }
+
+        if(cursor.moveToFirst()){
+            while(!cursor.isAfterLast){
+                isDeveloper =
+                    cursor.getInt(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_ISDEVELOPER)) > 0;
+                cursor.moveToNext()
+            }
+        }
+        return isDeveloper;
+    }
+
     fun readUser(userid: Long): ArrayList<DbModels.User> {
         val users = ArrayList<DbModels.User>()
         val db = readableDatabase
@@ -201,6 +231,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         var email: String
         var password: String
         var userlists: ByteArray
+        var isdeveloper: Boolean
         var username: String
 
         if (cursor!!.moveToFirst()) {
@@ -209,10 +240,11 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 last = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LAST))
                 email = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_EMAIL))
                 password = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_PASSWORD))
+                isdeveloper = cursor.getInt(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LISTS)) > 0;
                 userlists = cursor.getBlob(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LISTS))
                 username = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_USERNAME))
 
-                users.add(DbModels.User(userid, username, first, last, email, password, userlists))
+                users.add(DbModels.User(userid, username, first, last, email, password, isdeveloper, userlists))
                 cursor.moveToNext()
             }
         }

@@ -14,6 +14,7 @@ object DbContract {
             val COLUMN_USER_LISTS = "userlists"
             val COLUMN_USER_EMAIL = "useremail"
             val COLUMN_USER_PASSWORD = "userpassword"
+            val COLUMN_USER_ISDEVELOPER = "isdeveloper"
         }
     }
 

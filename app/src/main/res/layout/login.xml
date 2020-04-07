@@ -48,11 +48,5 @@
             android:text="@string/createAccount"
             android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/to_display_database_information_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/to_display_users_page" />
-
     </LinearLayout>
 </ScrollView>

@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.59" />
 
     <Button
-        android:id="@+id/display_users_to_login_btn"
+        android:id="@+id/display_users_to_dev_page_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/display_users_to_login"

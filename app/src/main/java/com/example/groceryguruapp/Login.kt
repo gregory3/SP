@@ -40,7 +40,13 @@ class Login : Fragment() {
 
                //goes to home screen
                var authenticated = dbHelper.validateLoginCredentials(email, password);
-               if(authenticated){
+               var isDeveloper = dbHelper.isDeveloper(email);
+               if (authenticated && isDeveloper){
+                   findNavController().navigate(R.id.action_login_to_developerHomePage);
+                   view.findViewById<EditText>(R.id.login_input_email).setText("");
+                   view.findViewById<EditText>(R.id.login_input_password).setText("");
+               }
+               else if(authenticated && !isDeveloper){
                    findNavController().navigate(R.id.action_login_to_homePage);
                    view.findViewById<EditText>(R.id.login_input_email).setText("");
                    view.findViewById<EditText>(R.id.login_input_password).setText("");
@@ -52,10 +58,6 @@ class Login : Fragment() {
            view.findViewById<Button>(R.id.link_signup).setOnClickListener {
                //goes to profile
                findNavController().navigate(R.id.action_login_to_createAccount)
-           }
-
-           view.findViewById<Button>(R.id.to_display_database_information_btn).setOnClickListener {
-               findNavController().navigate(R.id.action_login_to_displayDatabaseInformation)
            }
 
        }

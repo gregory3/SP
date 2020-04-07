@@ -9,6 +9,7 @@ object DbModels {
         val userlast: String,
         val useremail: String,
         val userpassword: String,
+        val isdeveloper: Boolean,
         val userlists: ByteArray?)
 
     class GroceryList(val listid: Long,

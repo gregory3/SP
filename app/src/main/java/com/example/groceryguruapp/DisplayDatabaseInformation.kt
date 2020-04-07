@@ -55,7 +55,7 @@ class DisplayDatabaseInformation : Fragment() {
             var userlist = ArrayList<String>(users.size)
 
             for(i in users) {
-                userlist.add(i.username + " " + i.userpassword + " " + i.isdeveloper);
+                userlist.add("ID: " + i.userid + "\nEmail: " + i.useremail + "\nPassword: " + i.userpassword + "\nIsDeveloper: " + i.isdeveloper);
             }
 
             val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, userlist)

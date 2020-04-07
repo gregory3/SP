@@ -31,7 +31,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                     DbContract.GroceryListEntry.COLUMN_LIST_NAME + " TEXT, " +
                     DbContract.GroceryListEntry.COLUMN_LIST + " BLOB);" +
                     "create table " + DbContract.ItemEntry.TABLE_NAME + " (" +
-                    DbContract.ItemEntry.COLUMN_ITEM_ID + " TEXT PRIMARY KEY, " +
+                    DbContract.ItemEntry.COLUMN_ITEM_ID + " LONG PRIMARY KEY, " +
                     DbContract.ItemEntry.COLUMN_ITEM_NAME + " TEXT, " +
                     DbContract.ItemEntry.COLUMN_ITEM_CATEGORY + "TEXT);"
 
@@ -74,16 +74,26 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         val newRowId = db.insert(DbContract.UserEntry.TABLE_NAME, null, values)
         // create update call to update user to have rowId as userId
-        val rowId = ContentValues()
-        rowId.put(DbContract.UserEntry.COLUMN_USER_ID, newRowId)
-        values.put(DbContract.UserEntry.COLUMN_USER_USERNAME, user.username)
-        values.put(DbContract.UserEntry.COLUMN_USER_FIRST, user.userfirst)
-        values.put(DbContract.UserEntry.COLUMN_USER_LAST, user.userlast)
-        values.put(DbContract.UserEntry.COLUMN_USER_EMAIL, user.useremail)
-        values.put(DbContract.UserEntry.COLUMN_USER_PASSWORD, user.userpassword)
-        values.put(DbContract.UserEntry.COLUMN_USER_LISTS, user.userlists)
+        val updateData = ContentValues()
+        updateData.put(DbContract.UserEntry.COLUMN_USER_ID, newRowId)
+//        values.put(DbContract.UserEntry.COLUMN_USER_USERNAME, user.username)
+//        values.put(DbContract.UserEntry.COLUMN_USER_FIRST, user.userfirst)
+//        values.put(DbContract.UserEntry.COLUMN_USER_LAST, user.userlast)
+//        values.put(DbContract.UserEntry.COLUMN_USER_EMAIL, user.useremail)
+//        values.put(DbContract.UserEntry.COLUMN_USER_PASSWORD, user.userpassword)
+//        values.put(DbContract.UserEntry.COLUMN_USER_LISTS, user.userlists)
 
-        db.update(DbContract.UserEntry.TABLE_NAME, rowId, DbContract.UserEntry.COLUMN_USER_USERNAME + " = " + "'" + user.username + "'", null)
+        val where = "username=?";
+        val whereArgs = Array(1){user.username};
+
+        try {
+            db.update(DbContract.UserEntry.TABLE_NAME, updateData, where, whereArgs)
+        } catch (e:Exception){
+            throw e
+        }
+
+        //db.update(DbContract.UserEntry.TABLE_NAME, updateData, DbContract.UserEntry.COLUMN_USER_USERNAME + " = " + "'" + user.username + "'", null)
+
 
         return true
     }

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.groceryguruapp.db.DbHelper
 import com.example.groceryguruapp.db.DbModels
@@ -36,17 +37,7 @@ class CreateAccount: Fragment() {
         view.findViewById<Button>(R.id.submit_signup_data).setOnClickListener {
             // creates user account
             createUser(view);
-            view.findViewById<EditText>(R.id.input_username).setText("");
-            view.findViewById<EditText>(R.id.input_firstname).setText("");
-            view.findViewById<EditText>(R.id.input_lastname).setText("");
-            view.findViewById<EditText>(R.id.input_email).setText("");
-            view.findViewById<EditText>(R.id.input_password).setText("");
-            view.findViewById<EditText>(R.id.input_re_password).setText("");
 
-            var dialog = Dialog(context!!);
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.argb(100, 0, 0, 0)))
-            dialog.setContentView(R.layout.create_user_dialog);
-            dialog.show();
         }
     }
 
@@ -71,6 +62,20 @@ class CreateAccount: Fragment() {
                     null
                 )
             );
+            view.findViewById<EditText>(R.id.input_username).setText("");
+            view.findViewById<EditText>(R.id.input_firstname).setText("");
+            view.findViewById<EditText>(R.id.input_lastname).setText("");
+            view.findViewById<EditText>(R.id.input_email).setText("");
+            view.findViewById<EditText>(R.id.input_password).setText("");
+            view.findViewById<EditText>(R.id.input_re_password).setText("");
+
+            var dialog = Dialog(context!!);
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.argb(100, 0, 0, 0)))
+            dialog.setContentView(R.layout.create_user_dialog);
+            dialog.show();
+        } else {
+            Toast.makeText(context!!,"Passwords do not match.", Toast.LENGTH_SHORT).show()
+            return;
         }
     }
 

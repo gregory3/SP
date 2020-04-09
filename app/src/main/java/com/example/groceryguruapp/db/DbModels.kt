@@ -16,7 +16,7 @@ object DbModels {
                        val listname: String,
                        val list: ByteArray)
 
-    class Item(val itemid: Long,
+    class Items(val itemid: Long,
                val itemname: String,
                val itemcategory: String)
 }

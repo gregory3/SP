@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
+import com.example.groceryguruapp.db.DbHelper
+import com.example.groceryguruapp.db.DbModels
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +23,7 @@ class CreateGroceryItemsPage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var dbHelper: DbHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +39,36 @@ class CreateGroceryItemsPage : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_grocery_items_page, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        dbHelper = DbHelper(context!!);
+
+        view.findViewById<Button>(R.id.submit_grocery_item_btn).setOnClickListener {
+            val groceryItemName = view.findViewById<EditText>(R.id.enter_grocery_item_name_txt).text.toString()
+            val groceryItemCategory = view.findViewById<Spinner>(R.id.enter_grocery_item_category_spinner).selectedItem.toString()
+
+            dbHelper.insertItem(DbModels.Items(0, groceryItemName, groceryItemCategory));
+        }
+
+        view.findViewById<Button>(R.id.view_grocery_items_btn).setOnClickListener {
+            var items = dbHelper.showAllItems();
+            var itemsList = ArrayList<String>(items.size);
+
+            for (i in items) {
+                itemsList.add("ID: " + i.itemid + "\nItem Name: " + i.itemname + "\nItem Category: " + i.itemcategory);
+            }
+
+            val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, itemsList)
+            view.findViewById<ListView>(R.id.grocery_items_view).adapter = adapter
+        }
+
+        view.findViewById<Button>(R.id.delete_selected_grocery_items_btn).setOnClickListener {
+
+        }
+
     }
 
     companion object {

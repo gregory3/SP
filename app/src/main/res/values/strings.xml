@@ -30,6 +30,22 @@
     <string name="dev_create_product_btn_txt">Create Grocery Item Objects</string>
     <string name="dev_view_user_lists">View Lists By User</string>
     <string name="dev_page_to_home_btn">Dev Page to Home Button</string>
+    <string name="create_grocery_item_name_text">Enter Grocery Item</string>
+    <string name="create_grocery_item_category">Select Grocery Category</string>
+    <string-array name="grocery_item_categories">
+        <item>Meat</item>
+        <item>Dairy</item>
+        <item>Vegetable</item>
+        <item>Fruit</item>
+        <item>Bread/Bakery</item>
+        <item>Canned/Jarred Good</item>
+        <item>Dry/Baking Good</item>
+        <item>Frozen Food</item>
+    </string-array>
+    <string name="grocery_item_prompt">Choose a category</string>
+    <string name="create_grocery_item_btn">Submit</string>
+    <string name="view_grocery_items">View Grocery Items</string>
+    <string name="delete_selected_items">Delete Items</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

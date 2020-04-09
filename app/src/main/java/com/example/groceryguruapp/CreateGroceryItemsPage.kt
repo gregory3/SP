@@ -5,11 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import androidx.navigation.fragment.findNavController
+import android.widget.*
 import com.example.groceryguruapp.db.DbHelper
+import com.example.groceryguruapp.db.DbModels
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,16 +16,14 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [DisplayDatabaseInformation.newInstance] factory method to
+ * Use the [CreateGroceryItemsPage.newInstance] factory method to
  * create an instance of this fragment.
  */
-class DisplayDatabaseInformation : Fragment() {
+class CreateGroceryItemsPage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
     lateinit var dbHelper: DbHelper
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,32 +38,35 @@ class DisplayDatabaseInformation : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_display_database_information, container, false)
+        return inflater.inflate(R.layout.fragment_create_grocery_items_page, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         dbHelper = DbHelper(context!!);
-        view.findViewById<Button>(R.id.show_users).setOnClickListener {
-            var users = dbHelper.showAllUsers()
 
-            var userlist = ArrayList<String>(users.size)
+        view.findViewById<Button>(R.id.submit_grocery_item_btn).setOnClickListener {
+            val groceryItemName = view.findViewById<EditText>(R.id.enter_grocery_item_name_txt).text.toString()
+            val groceryItemCategory = view.findViewById<Spinner>(R.id.enter_grocery_item_category_spinner).selectedItem.toString()
 
-            for(i in users) {
-                userlist.add("ID: " + i.userid + "\nEmail: " + i.useremail + "\nPassword: " + i.userpassword + "\nIsDeveloper: " + i.isdeveloper);
+            dbHelper.insertItem(DbModels.Items(0, groceryItemName, groceryItemCategory));
+        }
+
+        view.findViewById<Button>(R.id.view_grocery_items_btn).setOnClickListener {
+            var items = dbHelper.showAllItems();
+            var itemsList = ArrayList<String>(items.size);
+
+            for (i in items) {
+                itemsList.add("ID: " + i.itemid + "\nItem Name: " + i.itemname + "\nItem Category: " + i.itemcategory);
             }
 
-            val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, userlist)
-            view.findViewById<ListView>(R.id.list_view_display_users).adapter = adapter
+            val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, itemsList)
+            view.findViewById<ListView>(R.id.grocery_items_view).adapter = adapter
         }
 
-        view.findViewById<Button>(R.id.display_users_to_dev_page_btn).setOnClickListener {
-            findNavController().navigate(R.id.action_displayDatabaseInformation_to_developerHomePage);
-        }
+        view.findViewById<Button>(R.id.delete_selected_grocery_items_btn).setOnClickListener {
 
-        view.findViewById<Button>(R.id.delete_all_users_btn).setOnClickListener {
-            dbHelper.deleteAllUsers()
         }
 
     }
@@ -79,12 +78,12 @@ class DisplayDatabaseInformation : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment DisplayDatabaseInformation.
+         * @return A new instance of fragment CreateGroceryItemsPage.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            DisplayDatabaseInformation().apply {
+            CreateGroceryItemsPage().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

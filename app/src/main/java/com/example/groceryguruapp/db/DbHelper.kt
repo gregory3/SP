@@ -12,26 +12,34 @@ import java.util.ArrayList
 
 class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
     companion object {
-        val DATABASE_VERSION = 1
+        // increase db version when you add/remove fields + tables
+        val DATABASE_VERSION = 7
         val DATABASE_NAME = "FeedReader.db"
 
-        private val SQL_CREATE_ENTRIES =
-            "create table " + DbContract.UserEntry.TABLE_NAME + " (" +
-                    DbContract.UserEntry.COLUMN_USER_ID + " LONG PRIMARY KEY, " +
-                    DbContract.UserEntry.COLUMN_USER_USERNAME + " TEXT, " +
-                    DbContract.UserEntry.COLUMN_USER_FIRST + " TEXT, " +
-                    DbContract.UserEntry.COLUMN_USER_LAST + " TEXT, " +
-                    DbContract.UserEntry.COLUMN_USER_EMAIL + " TEXT, " +
-                    DbContract.UserEntry.COLUMN_USER_PASSWORD + " TEXT, " +
-                    DbContract.UserEntry.COLUMN_USER_LISTS + " BLOB);" +
-                    "create table " + DbContract.GroceryListEntry.TABLE_NAME + " (" +
-                    DbContract.GroceryListEntry.COLUMN_LIST_ID + " TEXT PRIMARY KEY, " +
-                    DbContract.GroceryListEntry.COLUMN_LIST_NAME + " TEXT, " +
-                    DbContract.GroceryListEntry.COLUMN_LIST + " BLOB);" +
-                    "create table " + DbContract.ItemEntry.TABLE_NAME + " (" +
-                    DbContract.ItemEntry.COLUMN_ITEM_ID + " TEXT PRIMARY KEY, " +
-                    DbContract.ItemEntry.COLUMN_ITEM_NAME + " TEXT, " +
-                    DbContract.ItemEntry.COLUMN_ITEM_CATEGORY + "TEXT);"
+//        private val SQL_CREATE_ENTRIES =
+//                    "create table " + DbContract.UserEntry.TABLE_NAME + " (" +
+//                    DbContract.UserEntry.COLUMN_USER_ID + " LONG PRIMARY KEY AUTOINCREMENT, " +
+//                    DbContract.UserEntry.COLUMN_USER_USERNAME + " TEXT, " +
+//                    DbContract.UserEntry.COLUMN_USER_FIRST + " TEXT, " +
+//                    DbContract.UserEntry.COLUMN_USER_LAST + " TEXT, " +
+//                    DbContract.UserEntry.COLUMN_USER_EMAIL + " TEXT, " +
+//                    DbContract.UserEntry.COLUMN_USER_PASSWORD + " TEXT, " +
+//                    DbContract.UserEntry.COLUMN_USER_ISDEVELOPER + " INTEGER DEFAULT 0, " +
+//                    DbContract.UserEntry.COLUMN_USER_LISTS + " BLOB);" +
+//
+//                    " create table " + DbContract.ItemEntry.TABLE_NAME + " (" +
+//                    DbContract.ItemEntry.COLUMN_ITEM_ID + " LONG PRIMARY KEY AUTOINCREMENT, " +
+//                    DbContract.ItemEntry.COLUMN_ITEM_NAME + " TEXT, " +
+//                    DbContract.ItemEntry.COLUMN_ITEM_CATEGORY + " TEXT);" +
+//
+//                    " create table " + DbContract.GroceryListEntry.TABLE_NAME + " (" +
+//                    DbContract.GroceryListEntry.COLUMN_LIST_ID + " TEXT PRIMARY KEY AUTOINCREMENT, " +
+//                    DbContract.GroceryListEntry.COLUMN_LIST_NAME + " TEXT, " +
+//                    DbContract.GroceryListEntry.COLUMN_LIST + " BLOB);"
+
+        private val sqlUsers = "CREATE TABLE users(userid INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, userfirst TEXT, userlast TEXT, useremail TEXT, userpassword TEXT, isdeveloper INTEGER DEFAULT 0, userlists BLOB);"
+        private val sqlItems = "CREATE TABLE items(itemid INTEGER PRIMARY KEY AUTOINCREMENT, itemname TEXT, itemcategory TEXT);"
+        private val sqlLists = "CREATE TABLE shoppinglists(listid INTEGER PRIMARY KEY AUTOINCREMENT, listname TEXT, listitems BLOB);"
 
         private val SQL_DELETE_ENTRIES = "drop table if exists " + DbContract.UserEntry.TABLE_NAME + ";" +
                 "drop table if exists " + DbContract.GroceryListEntry.TABLE_NAME + ";" +
@@ -39,7 +47,10 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(SQL_CREATE_ENTRIES)
+        // db.execSQL(SQL_CREATE_ENTRIES)
+        db.execSQL(sqlUsers)
+        db.execSQL(sqlItems)
+        db.execSQL(sqlLists)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -67,18 +78,24 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(DbContract.UserEntry.COLUMN_USER_PASSWORD, user.userpassword)
         values.put(DbContract.UserEntry.COLUMN_USER_LISTS, user.userlists)
 
-        val newRowId = db.insert(DbContract.UserEntry.TABLE_NAME, null, values)
-        // create update call to update user to have rowId as userId
-        val rowId = ContentValues()
-        rowId.put(DbContract.UserEntry.COLUMN_USER_ID, newRowId)
-        values.put(DbContract.UserEntry.COLUMN_USER_USERNAME, user.username)
-        values.put(DbContract.UserEntry.COLUMN_USER_FIRST, user.userfirst)
-        values.put(DbContract.UserEntry.COLUMN_USER_LAST, user.userlast)
-        values.put(DbContract.UserEntry.COLUMN_USER_EMAIL, user.useremail)
-        values.put(DbContract.UserEntry.COLUMN_USER_PASSWORD, user.userpassword)
-        values.put(DbContract.UserEntry.COLUMN_USER_LISTS, user.userlists)
+        // Comment this line out after you create a developer user in your local database
+        // TODO Going to implement creation of developer users in the developer pages.
+        values.put(DbContract.UserEntry.COLUMN_USER_ISDEVELOPER, 1);
 
-        db.update(DbContract.UserEntry.TABLE_NAME, rowId, DbContract.UserEntry.COLUMN_USER_USERNAME + " = " + "'" + user.username + "'", null)
+        val newRowId = db.insert(DbContract.UserEntry.TABLE_NAME, null, values)
+
+        // create update call to update user to have rowId as userId
+//        val updateData = ContentValues()
+//        updateData.put(DbContract.UserEntry.COLUMN_USER_ID, newRowId)
+//
+//        val where = "username=?";
+//        val whereArgs = Array(1){user.username};
+//
+//        try {
+//            db.update(DbContract.UserEntry.TABLE_NAME, updateData, where, whereArgs)
+//        } catch (e:Exception){
+//            throw e
+//        }
 
         return true
     }
@@ -98,15 +115,26 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     @Throws(SQLiteConstraintException::class)
-    fun insertItem(item: DbModels.Item): Boolean {
+    fun insertItem(item: DbModels.Items): Boolean {
         val db = writableDatabase
 
         val values = ContentValues()
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_ID, item.itemid)
         values.put(DbContract.ItemEntry.COLUMN_ITEM_NAME, item.itemname)
         values.put(DbContract.ItemEntry.COLUMN_ITEM_CATEGORY, item.itemcategory)
 
         val newRowId = db.insert(DbContract.ItemEntry.TABLE_NAME, null, values)
+
+//        val updateData = ContentValues()
+//        updateData.put(DbContract.ItemEntry.COLUMN_ITEM_ID, newRowId)
+//
+//        val where = "itemname=?";
+//        val whereArgs = Array(1){item.itemname};
+//
+//        try {
+//            db.update(DbContract.ItemEntry.TABLE_NAME, updateData, where, whereArgs)
+//        } catch (e:Exception){
+//            throw e
+//        }
 
         return true
     }
@@ -135,6 +163,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     fun showAllUsers(): ArrayList<DbModels.User> {
         val users = ArrayList<DbModels.User>()
         val db = readableDatabase
+        var isdeveloper = false;
         lateinit var cursor: Cursor
         try {
             cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME, null)
@@ -151,12 +180,38 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 var password = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_PASSWORD))
                 var userlists = cursor.getBlob(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LISTS))
                 var username = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_USERNAME))
+                isdeveloper = cursor.getInt(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_ISDEVELOPER)) > 0
 
-                users.add(DbModels.User(userid, username, first, last, email, password, userlists))
+
+                users.add(DbModels.User(userid, username, first, last, email, password, isdeveloper, userlists))
                 cursor.moveToNext()
             }
         }
         return users
+    }
+
+    fun showAllItems(): ArrayList<DbModels.Items> {
+        val items = ArrayList<DbModels.Items>()
+        val db = readableDatabase
+        lateinit var cursor: Cursor
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.ItemEntry.TABLE_NAME, null)
+        } catch(e: SQLiteException){
+            throw e
+        }
+
+        if (cursor.moveToFirst()){
+            while(!cursor.isAfterLast){
+                var itemid = cursor.getLong(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_ID))
+                var itemname = cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME))
+                var itemcategory = cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_CATEGORY))
+
+
+                items.add(DbModels.Items(itemid, itemname, itemcategory))
+                cursor.moveToNext()
+            }
+        }
+        return items
     }
 
     fun validateLoginCredentials(email:String, password:String): Boolean {
@@ -184,6 +239,28 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return false
     }
 
+    fun isDeveloper(email:String): Boolean {
+        val db = readableDatabase
+        var isDeveloper = false
+
+        lateinit var cursor: Cursor
+
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME + " where useremail = '" + email + "'", null)
+        } catch(e: SQLiteException){
+            throw e
+        }
+
+        if(cursor.moveToFirst()){
+            while(!cursor.isAfterLast){
+                isDeveloper =
+                    cursor.getInt(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_ISDEVELOPER)) > 0;
+                cursor.moveToNext()
+            }
+        }
+        return isDeveloper;
+    }
+
     fun readUser(userid: Long): ArrayList<DbModels.User> {
         val users = ArrayList<DbModels.User>()
         val db = readableDatabase
@@ -192,7 +269,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME + " where " +
                     DbContract.UserEntry + " = '" + userid + "'", null)
         } catch(e: SQLiteException) {
-            db.execSQL(SQL_CREATE_ENTRIES)
+            // db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()
         }
 
@@ -201,6 +278,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         var email: String
         var password: String
         var userlists: ByteArray
+        var isdeveloper: Boolean
         var username: String
 
         if (cursor!!.moveToFirst()) {
@@ -209,10 +287,11 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 last = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LAST))
                 email = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_EMAIL))
                 password = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_PASSWORD))
+                isdeveloper = cursor.getInt(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LISTS)) > 0;
                 userlists = cursor.getBlob(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_LISTS))
                 username = cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_USERNAME))
 
-                users.add(DbModels.User(userid, username, first, last, email, password, userlists))
+                users.add(DbModels.User(userid, username, first, last, email, password, isdeveloper, userlists))
                 cursor.moveToNext()
             }
         }
@@ -227,7 +306,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             cursor = db.rawQuery("select * from " + DbContract.GroceryListEntry.TABLE_NAME + " where " +
                     DbContract.GroceryListEntry.COLUMN_LIST_ID + " = '" + listid + "'", null)
         } catch(e: SQLiteException) {
-            db.execSQL(SQL_CREATE_ENTRIES)
+           //  db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()
         }
 
@@ -254,7 +333,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         try {
             cursor = db.rawQuery("select * from " + DbContract.GroceryListEntry.TABLE_NAME, null)
         } catch(e: SQLiteException) {
-            db.execSQL(SQL_CREATE_ENTRIES)
+            // db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()
         }
 
@@ -276,15 +355,15 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return lists
     }
 
-    fun readItem(itemid: Long): ArrayList<DbModels.Item> {
-        val items = ArrayList<DbModels.Item>()
+    fun readItem(itemid: Long): ArrayList<DbModels.Items> {
+        val items = ArrayList<DbModels.Items>()
         val db = writableDatabase
         var cursor: Cursor? = null
         try {
             cursor = db.rawQuery("select * from " + DbContract.ItemEntry.TABLE_NAME + " where " +
                     DbContract.ItemEntry.COLUMN_ITEM_ID + " = '" + itemid + "'", null)
         } catch(e: SQLiteException) {
-            db.execSQL(SQL_CREATE_ENTRIES)
+            // db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()
         }
 
@@ -297,7 +376,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 category = cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_CATEGORY))
 
 
-                items.add(DbModels.Item(itemid, name, category))
+                items.add(DbModels.Items(itemid, name, category))
                 cursor.moveToNext()
             }
         }

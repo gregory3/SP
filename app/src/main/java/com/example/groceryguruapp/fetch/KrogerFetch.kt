@@ -15,7 +15,7 @@ class KrogerFetch() {
         private val client = OkHttpClient()
     }
 
-    private fun oAuth2(scope: String): Response {
+    private fun oAuth2(scope: String): String {
         var token = ""
         var authend = "$endpoint/connect/oauth2/token"
         var authgrant = grant
@@ -31,10 +31,10 @@ class KrogerFetch() {
             .build()
         val response = client.newCall(request).execute()
 
-        return response
+        return response.body!!.string()
     }
 
-    private fun locGetHttp(zipcode: String, token: String): Response {
+    private fun locGetHttp(zipcode: String, token: String): String {
         var locend = "$endpoint/locations?filter.zipCode.near=$zipcode"
         var request = Request.Builder()
             .url(locend)
@@ -44,10 +44,10 @@ class KrogerFetch() {
             .build()
         val response = client.newCall(request).execute()
 
-        return response
+        return response.body!!.string()
     }
 
-    private fun prodGetHttp(term: String, locationId: String, token: String): Response {
+    private fun prodGetHttp(term: String, locationId: String, token: String): String {
         var prodend = "$endpoint/products"
         if(term != "")
             prodend = "$prodend/?filter.term=$term"
@@ -61,17 +61,20 @@ class KrogerFetch() {
             .build()
         val response = client.newCall(request).execute()
 
-        return response
+        return response.body!!.string()
     }
 
-    fun getProds(items: Array<String>, zipcode: String, scope: String): ArrayList<String> {
+    fun getProds(items: Array<String>, zipcode: String, scope: String): String {
         var token = oAuth2(scope)
-        var locationId = locGetHttp(zipcode, token.toString())
+        /*
+        var locationId = locGetHttp(zipcode, token)
         var prices = ArrayList<String>()
         for(item in items) {
-            prices.add(prodGetHttp(item, locationId.toString(), token.toString()).toString())
+            prices.add(prodGetHttp(item, locationId, token))
         }
 
         return prices
+         */
+        return token
     }
 }

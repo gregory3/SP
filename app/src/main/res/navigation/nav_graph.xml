@@ -36,4 +36,58 @@
             android:id="@+id/action_homePage_to_createList"
             app:destination="@id/createList" />
     </fragment>
+<<<<<<< Updated upstream
+=======
+    <fragment
+        android:id="@+id/createUserDialog"
+        android:name="com.example.groceryguruapp.CreateUserDialog"
+        android:label="CreateUserDialog" >
+        <action
+            android:id="@+id/action_createUserDialog_to_login"
+            app:destination="@id/login" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.groceryguruapp.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/displayDatabaseInformation"
+        android:name="com.example.groceryguruapp.DisplayDatabaseInformation"
+        android:label="fragment_display_database_information"
+        tools:layout="@layout/fragment_display_database_information" >
+        <action
+            android:id="@+id/action_displayDatabaseInformation_to_developerHomePage"
+            app:destination="@id/developerHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/developerHomePage"
+        android:name="com.example.groceryguruapp.DeveloperHomePage"
+        android:label="fragment_developer_home_page"
+        tools:layout="@layout/fragment_developer_home_page" >
+        <action
+            android:id="@+id/action_developerHomePage_to_displayDatabaseInformation"
+            app:destination="@id/displayDatabaseInformation" />
+        <action
+            android:id="@+id/action_developerHomePage_to_createGroceryItemsPage"
+            app:destination="@id/createGroceryItemsPage" />
+        <action
+            android:id="@+id/action_developerHomePage_to_homePage"
+            app:destination="@id/homePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/createGroceryItemsPage"
+        android:name="com.example.groceryguruapp.CreateGroceryItemsPage"
+        android:label="fragment_create_grocery_items_page"
+        tools:layout="@layout/fragment_create_grocery_items_page" >
+        <action
+            android:id="@+id/action_createGroceryItemsPage_to_developerHomePage"
+            app:destination="@id/developerHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProfilePage"
+        android:name="com.example.groceryguruapp.CreateProfilePage"
+        android:label="fragment_create_profile_page"
+        tools:layout="@layout/fragment_create_profile_page" />
+>>>>>>> Stashed changes
 </navigation>

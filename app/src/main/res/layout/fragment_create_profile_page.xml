@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true">
+    tools:context=".CreateProfilePage">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="240dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
+
+
+
+            <EditText
+                android:id="@+id/input_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/user_name"
+                android:inputType="textPersonName" />
+
+
+
+            <!-- Email Label -->
+            <EditText android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="@string/email"/>
+
+
+            <!-- password -->
+            <EditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+
+
+            <!-- retype password -->
+            <EditText
+                android:id="@+id/input_re_password"<!--changes -->
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Retype_Password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/input_car_mpg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/car_mpg"
+                android:inputType="textPassword" />
+
+
+
+
+            <Button
+                android:id="@+id/submit_update_profile_data"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:text="Update Profile"
+                android:textSize="16dip" />
+
+        </LinearLayout>
+    </ScrollView>

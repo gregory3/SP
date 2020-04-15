@@ -4,6 +4,7 @@ import org.junit.Test
 import com.example.groceryguruapp.fetch.KrogerFetch
 
 import org.junit.Assert.*
+
 class fetchJUnit {
 
     private val fetchdata = KrogerFetch()

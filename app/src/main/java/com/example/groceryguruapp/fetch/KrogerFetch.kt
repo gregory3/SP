@@ -48,7 +48,7 @@ class KrogerFetch() {
         return response.body!!.string()
     }
 
-    private fun prodGetHttp(term: String, locationId: String, token: String): String {
+    private fun prodGetHttp(term: String, locationId: String, token: String): JSONObject {
         var prodend = "$endpoint/products"
         if(term != "")
             prodend = "$prodend/?filter.term=$term"
@@ -62,7 +62,7 @@ class KrogerFetch() {
             .build()
         val response = client.newCall(request).execute()
 
-        return response.body!!.string()
+        return JSONObject(response.body!!.string())
     }
 
     fun getProds(items: Array<String>, zipcode: String, scope: String): String {

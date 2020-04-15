@@ -12,11 +12,10 @@ object DbModels {
         val isdeveloper: Boolean,
         val userlists: ByteArray?)
 
-    class GroceryList(val listid: Long,
-                       val listname: String,
+    class GroceryList(val listid: Int,
                        val list: ByteArray)
 
-    class Items(val itemid: Long,
+    class Items(val itemid: Int,
                val itemname: String,
                val itemcategory: String)
 }

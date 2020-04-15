@@ -39,7 +39,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         private val sqlUsers = "CREATE TABLE users(userid INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, userfirst TEXT, userlast TEXT, useremail TEXT, userpassword TEXT, isdeveloper INTEGER DEFAULT 0, userlists BLOB);"
         private val sqlItems = "CREATE TABLE items(itemid INTEGER PRIMARY KEY AUTOINCREMENT, itemname TEXT, itemcategory TEXT);"
-        private val sqlLists = "CREATE TABLE shoppinglists(listid INTEGER PRIMARY KEY AUTOINCREMENT, listname TEXT, listitems BLOB);"
+        private val sqlLists = "CREATE TABLE shoppinglists(listid INTEGER PRIMARY KEY AUTOINCREMENT, listitems BLOB);"
 
         private val SQL_DELETE_ENTRIES = "drop table if exists " + DbContract.UserEntry.TABLE_NAME + ";" +
                 "drop table if exists " + DbContract.GroceryListEntry.TABLE_NAME + ";" +
@@ -84,34 +84,19 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         val newRowId = db.insert(DbContract.UserEntry.TABLE_NAME, null, values)
 
-        // create update call to update user to have rowId as userId
-//        val updateData = ContentValues()
-//        updateData.put(DbContract.UserEntry.COLUMN_USER_ID, newRowId)
-//
-//        val where = "username=?";
-//        val whereArgs = Array(1){user.username};
-//
-//        try {
-//            db.update(DbContract.UserEntry.TABLE_NAME, updateData, where, whereArgs)
-//        } catch (e:Exception){
-//            throw e
-//        }
-
         return true
     }
 
     @Throws(SQLiteConstraintException::class)
-    fun insertList(userlist: DbModels.GroceryList): Boolean {
+    fun insertGroceryList(userlist: DbModels.GroceryList): Boolean {
         val db = writableDatabase
 
         val values = ContentValues()
-        values.put(DbContract.GroceryListEntry.COLUMN_LIST_ID, userlist.listid)
-        values.put(DbContract.GroceryListEntry.COLUMN_LIST_NAME, userlist.listname)
         values.put(DbContract.GroceryListEntry.COLUMN_LIST, userlist.list)
 
         val newRowId = db.insert(DbContract.GroceryListEntry.TABLE_NAME, null, values)
 
-        return true
+        return newRowId > -1
     }
 
     @Throws(SQLiteConstraintException::class)
@@ -123,18 +108,6 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(DbContract.ItemEntry.COLUMN_ITEM_CATEGORY, item.itemcategory)
 
         val newRowId = db.insert(DbContract.ItemEntry.TABLE_NAME, null, values)
-
-//        val updateData = ContentValues()
-//        updateData.put(DbContract.ItemEntry.COLUMN_ITEM_ID, newRowId)
-//
-//        val where = "itemname=?";
-//        val whereArgs = Array(1){item.itemname};
-//
-//        try {
-//            db.update(DbContract.ItemEntry.TABLE_NAME, updateData, where, whereArgs)
-//        } catch (e:Exception){
-//            throw e
-//        }
 
         return true
     }
@@ -202,7 +175,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         if (cursor.moveToFirst()){
             while(!cursor.isAfterLast){
-                var itemid = cursor.getLong(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_ID))
+                var itemid = cursor.getInt(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_ID))
                 var itemname = cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME))
                 var itemcategory = cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_CATEGORY))
 
@@ -212,6 +185,62 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             }
         }
         return items
+    }
+
+    fun showAllGroceryLists(): ArrayList<DbModels.GroceryList> {
+        val groceryLists = ArrayList<DbModels.GroceryList>()
+        val db = readableDatabase
+        lateinit var cursor: Cursor
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.GroceryListEntry.TABLE_NAME, null)
+        } catch(e: SQLiteException){
+            throw e
+        }
+
+        if (cursor.moveToFirst()){
+            while(!cursor.isAfterLast){
+                var listid = cursor.getInt(cursor.getColumnIndex(DbContract.GroceryListEntry.COLUMN_LIST_ID))
+                var groceries = cursor.getBlob(cursor.getColumnIndex(DbContract.GroceryListEntry.COLUMN_LIST))
+
+
+                groceryLists.add(DbModels.GroceryList(listid, groceries))
+                cursor.moveToNext()
+            }
+        }
+        return groceryLists
+    }
+
+    fun searchItems(itemname: String): ArrayList<DbModels.Items>
+    {
+        val db = readableDatabase
+        val items = ArrayList<DbModels.Items>()
+
+        lateinit var cursor: Cursor
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.ItemEntry.TABLE_NAME + " where itemname like '%" + itemname + "%'", null)
+        } catch(e: SQLiteException){
+            throw e
+        }
+
+        if (cursor.moveToFirst()){
+            while(!cursor.isAfterLast){
+                var itemid =
+                    cursor.getInt(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_ID))
+                var itemname =
+                    cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME))
+                var itemcategory =
+                    cursor.getString(cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_CATEGORY))
+
+                items.add(DbModels.Items(itemid, itemname, itemcategory))
+                cursor.moveToNext()
+            }
+        }
+
+        return items
+    }
+
+    fun updateUser(user: DbModels.User){
+
     }
 
     fun validateLoginCredentials(email:String, password:String): Boolean {
@@ -261,6 +290,50 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return isDeveloper;
     }
 
+    fun emailExists(email:String): Boolean {
+        val db = readableDatabase
+        var emailExists = false
+
+        lateinit var cursor: Cursor
+
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME + " where useremail = '" + email + "'", null)
+        } catch(e: SQLiteException){
+            throw e
+        }
+
+        if(cursor.moveToFirst()){
+            while(!cursor.isAfterLast){
+                emailExists =
+                    cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_EMAIL)) == email
+                cursor.moveToNext()
+            }
+        }
+        return emailExists
+    }
+
+    fun usernameExists(username:String): Boolean {
+        val db = readableDatabase
+        var usernameExists = false
+
+        lateinit var cursor: Cursor
+
+        try {
+            cursor = db.rawQuery("select * from " + DbContract.UserEntry.TABLE_NAME + " where username = '" + username + "'", null)
+        } catch(e: SQLiteException){
+            throw e
+        }
+
+        if(cursor.moveToFirst()){
+            while(!cursor.isAfterLast){
+                usernameExists =
+                    cursor.getString(cursor.getColumnIndex(DbContract.UserEntry.COLUMN_USER_EMAIL)) == username
+                cursor.moveToNext()
+            }
+        }
+        return usernameExists
+    }
+
     fun readUser(userid: Long): ArrayList<DbModels.User> {
         val users = ArrayList<DbModels.User>()
         val db = readableDatabase
@@ -298,7 +371,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return users
     }
 
-    fun readList(listid: Long): ArrayList<DbModels.GroceryList> {
+    fun readList(listid: Int): ArrayList<DbModels.GroceryList> {
         val lists = ArrayList<DbModels.GroceryList>()
         val db = writableDatabase
         var cursor: Cursor? = null
@@ -315,11 +388,10 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         if (cursor!!.moveToFirst()) {
             while(!cursor.isAfterLast) {
-                listname = cursor.getString(cursor.getColumnIndex(DbContract.GroceryListEntry.COLUMN_LIST_NAME))
                 userlist = cursor.getBlob(cursor.getColumnIndex(DbContract.GroceryListEntry.COLUMN_LIST))
 
 
-                lists.add(DbModels.GroceryList(listid, listname, userlist))
+                lists.add(DbModels.GroceryList(listid, userlist))
                 cursor.moveToNext()
             }
         }
@@ -337,25 +409,24 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             return ArrayList()
         }
 
-        var listid: Long
+        var listid: Int
         var listname: String
         var userlist: ByteArray
 
         if (cursor!!.moveToFirst()) {
             while(!cursor.isAfterLast) {
-                listid = cursor.getLong(cursor.getColumnIndex((DbContract.GroceryListEntry.COLUMN_LIST_ID)))
-                listname = cursor.getString(cursor.getColumnIndex(DbContract.GroceryListEntry.COLUMN_LIST_NAME))
+                listid = cursor.getInt(cursor.getColumnIndex((DbContract.GroceryListEntry.COLUMN_LIST_ID)))
                 userlist = cursor.getBlob(cursor.getColumnIndex(DbContract.GroceryListEntry.COLUMN_LIST))
 
 
-                lists.add(DbModels.GroceryList(listid, listname, userlist))
+                lists.add(DbModels.GroceryList(listid, userlist))
                 cursor.moveToNext()
             }
         }
         return lists
     }
 
-    fun readItem(itemid: Long): ArrayList<DbModels.Items> {
+    fun readItem(itemid: Int): ArrayList<DbModels.Items> {
         val items = ArrayList<DbModels.Items>()
         val db = writableDatabase
         var cursor: Cursor? = null

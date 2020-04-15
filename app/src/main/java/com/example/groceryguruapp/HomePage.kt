@@ -45,6 +45,10 @@ class HomePage : Fragment() {
         view.findViewById<Button>(R.id.create_new_list_button).setOnClickListener {
             findNavController().navigate(R.id.action_homePage_to_createList);
         }
+
+        view.findViewById<Button>(R.id.view_profile_btn).setOnClickListener {
+            findNavController().navigate(R.id.action_homePage_to_profilePage);
+        }
     }
 
     companion object {

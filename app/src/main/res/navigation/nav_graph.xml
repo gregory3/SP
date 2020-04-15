@@ -45,6 +45,9 @@
         <action
             android:id="@+id/action_homePage_to_createList"
             app:destination="@id/createList" />
+        <action
+            android:id="@+id/action_homePage_to_profilePage"
+            app:destination="@id/profilePage" />
     </fragment>
     <fragment
         android:id="@+id/createUserDialog"
@@ -104,4 +107,7 @@
             android:id="@+id/action_displayLists_to_developerHomePage"
             app:destination="@id/developerHomePage" />
     </fragment>
+        android:id="@+id/profilePage"
+        android:name="cpackage.ProfilePage"
+        android:label="fragment_profile_page" />
 </navigation>

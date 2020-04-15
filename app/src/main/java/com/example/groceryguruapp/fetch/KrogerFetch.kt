@@ -13,6 +13,7 @@ class KrogerFetch() {
         const val grant = "grant_type=client_credentials"
         const val authenc = "application/x-www-form-urlencoded"
         private val client = OkHttpClient()
+
     }
 
     private fun oAuth2(scope: String): String {

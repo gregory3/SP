@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.view.ViewParent
+import android.widget.*
 import androidx.navigation.fragment.findNavController
+import com.example.groceryguruapp.db.DbHelper
+import com.example.groceryguruapp.db.DbModels
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +25,8 @@ class CreateList : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var dbHelper: DbHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +42,60 @@ class CreateList : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_list, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        dbHelper = DbHelper(context!!);
+        lateinit var itemsList: ArrayList<String>
+        val groceryList = ArrayList<String>()
+        lateinit var groceryListObj: DbModels.GroceryList
+
+        view.findViewById<EditText>(R.id.productSearchTextView).setOnClickListener() {
+            val items = dbHelper.searchItems(
+                view.findViewById<EditText>(R.id.productSearchTextView).text.toString().trim()
+            )
+            val itemsList = ArrayList<String>(items.size)
+            val itemIds = ArrayList<String>(items.size)
+            for (i in items) {
+                itemsList.add("Item Name: " + i.itemname);
+                itemIds.add("" + i.itemid);
+            }
+
+            val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, itemsList)
+            view.findViewById<ListView>(R.id.itemSearchResultView).adapter = adapter
+
+
+            var listView = view.findViewById<ListView>(R.id.itemSearchResultView)
+            var adapterView = ArrayAdapter<String>(
+                context!!,
+                android.R.layout.simple_list_item_2,
+                android.R.id.text1,
+                itemsList
+            )
+
+            listView.adapter = adapter
+
+            listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                Toast.makeText(context!!, itemsList[i] + " selected", Toast.LENGTH_SHORT).show()
+                groceryList.add(itemIds[i])
+            }
+        }
+
+        view.findViewById<Button>(R.id.create_grocery_list_btn).setOnClickListener {
+            var ids = ByteArray(groceryList.size)
+            for (i in groceryList) {
+                ids[0] = i.toByte()
+            }
+            groceryListObj = DbModels.GroceryList(0, ids)
+            val success = dbHelper.insertGroceryList(groceryListObj);
+
+            if (success) {
+                Toast.makeText(context!!, "List Created", Toast.LENGTH_SHORT).show()
+                // in future implementations, we would invoke the api call to perform grocery item search
+            }
+        }
     }
 
 

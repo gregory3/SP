@@ -82,6 +82,9 @@
         <action
             android:id="@+id/action_developerHomePage_to_homePage"
             app:destination="@id/homePage" />
+        <action
+            android:id="@+id/action_developerHomePage_to_displayLists"
+            app:destination="@id/displayLists" />
     </fragment>
     <fragment
         android:id="@+id/createGroceryItemsPage"
@@ -90,6 +93,15 @@
         tools:layout="@layout/fragment_create_grocery_items_page" >
         <action
             android:id="@+id/action_createGroceryItemsPage_to_developerHomePage"
+            app:destination="@id/developerHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/displayLists"
+        android:name="com.example.groceryguruapp.DisplayLists"
+        android:label="fragment_display_lists"
+        tools:layout="@layout/fragment_display_lists" >
+        <action
+            android:id="@+id/action_displayLists_to_developerHomePage"
             app:destination="@id/developerHomePage" />
     </fragment>
 </navigation>

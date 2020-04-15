@@ -34,20 +34,29 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.052" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+    <ListView
+        android:id="@+id/itemSearchResultView"
+        android:layout_width="415dp"
+        android:layout_height="431dp"
+        android:choiceMode="singleChoice"
+        android:clickable="true"
+        android:divider="@android:color/holo_green_dark"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productSearchTextView"
-        app:layout_constraintVertical_bias="0.05">
+        app:layout_constraintVertical_bias="0.363" />
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
-    </LinearLayout>
+    <Button
+        android:id="@+id/create_grocery_list_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/create_grocery_list_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemSearchResultView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

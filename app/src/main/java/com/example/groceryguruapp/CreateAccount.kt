@@ -49,6 +49,44 @@ class CreateAccount: Fragment() {
         var password = view.findViewById<EditText>(R.id.input_password).text.toString();
         var retryPassword = view.findViewById<EditText>(R.id.input_re_password).text.toString();
 
+        var emailExists = dbHelper.emailExists(email);
+        var usernameExists = dbHelper.usernameExists(username);
+
+        if(username.isEmpty()) {
+            view.findViewById<EditText>(R.id.input_username).error = "Username is required."
+            return;
+        }
+        if(firstName.isEmpty()) {
+            view.findViewById<EditText>(R.id.input_firstname).error = "First name is required."
+            return;
+        }
+        if(lastName.isEmpty()) {
+            view.findViewById<EditText>(R.id.input_lastname).error = "Last name is required."
+            return;
+        }
+        if(email.isEmpty()) {
+            view.findViewById<EditText>(R.id.input_email).error = "Email is required."
+            return;
+        }
+        if(password.isEmpty()) {
+            view.findViewById<EditText>(R.id.input_password).error = "Password is required."
+            return;
+        }
+        if(retryPassword.isEmpty()) {
+            view.findViewById<EditText>(R.id.input_re_password).error = "Re enter password."
+            return;
+        }
+
+        if(emailExists) {
+            Toast.makeText(context!!, "Email is already in use. Please login, or try a different email.", Toast.LENGTH_SHORT).show()
+            return;
+        }
+
+        if(usernameExists) {
+            Toast.makeText(context!!, "Username is in use. Please enter a different username.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (password.trim() == retryPassword.trim()) {
             var result = dbHelper.insertUser(
                 DbModels.User(

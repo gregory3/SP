@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.example.groceryguruapp.db.DbHelper
@@ -33,25 +34,30 @@ class Login : Fragment() {
            dbHelper = DbHelper(context!!);
 
 
-
            view.findViewById<Button>(R.id.btn_login).setOnClickListener {
                var email = view.findViewById<EditText>(R.id.login_input_email).text.toString()
                var password = view.findViewById<EditText>(R.id.login_input_password).text.toString()
 
-               //goes to home screen
-               var authenticated = dbHelper.validateLoginCredentials(email, password);
-               var isDeveloper = dbHelper.isDeveloper(email);
-               if (authenticated && isDeveloper){
-                   findNavController().navigate(R.id.action_login_to_developerHomePage);
-                   view.findViewById<EditText>(R.id.login_input_email).setText("");
-                   view.findViewById<EditText>(R.id.login_input_password).setText("");
-               }
-               else if(authenticated && !isDeveloper){
-                   findNavController().navigate(R.id.action_login_to_homePage);
-                   view.findViewById<EditText>(R.id.login_input_email).setText("");
-                   view.findViewById<EditText>(R.id.login_input_password).setText("");
+               if (email.isEmpty()) {
+                   view.findViewById<EditText>(R.id.login_input_email).error = "Email is required."
+
+               } else if (password.isEmpty()) {
+                   view.findViewById<EditText>(R.id.login_input_password).error = "Password is required."
                } else {
-                   view.setBackgroundColor(2)
+                   //goes to home screen
+                   var authenticated = dbHelper.validateLoginCredentials(email, password);
+                   var isDeveloper = dbHelper.isDeveloper(email);
+                   if (authenticated && isDeveloper) {
+                       findNavController().navigate(R.id.action_login_to_developerHomePage);
+                       view.findViewById<EditText>(R.id.login_input_email).setText("");
+                       view.findViewById<EditText>(R.id.login_input_password).setText("");
+                   } else if (authenticated && !isDeveloper) {
+                       findNavController().navigate(R.id.action_login_to_homePage);
+                       view.findViewById<EditText>(R.id.login_input_email).setText("");
+                       view.findViewById<EditText>(R.id.login_input_password).setText("");
+                   } else {
+                       view.setBackgroundColor(2)
+                   }
                }
 
            }

@@ -107,7 +107,11 @@
             android:id="@+id/action_displayLists_to_developerHomePage"
             app:destination="@id/developerHomePage" />
     </fragment>
+    <fragment
         android:id="@+id/profilePage"
+        android:name="cpackage.ProfilePage"
+        android:label="ProfilePage" />
+    android:id="@+id/profilePage"
         android:name="cpackage.ProfilePage"
         android:label="fragment_profile_page" />
 </navigation>

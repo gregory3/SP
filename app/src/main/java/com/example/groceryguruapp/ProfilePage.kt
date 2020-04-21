@@ -47,10 +47,10 @@ class ProfilePage: Fragment() {
             view.findViewById<EditText>(R.id.input_password).setText("");
             view.findViewById<EditText>(R.id.input_re_password).setText("");
 
-            var dialog = Dialog(context!!);
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.argb(100, 0, 0, 0)))
-            dialog.setContentView(R.layout.create_user_dialog);
-            dialog.show();
+//            var dialog = Dialog(context!!);
+//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.argb(100, 0, 0, 0)))
+//            dialog.setContentView(R.layout.create_user_dialog);
+//            dialog.show();
         }
     }
 

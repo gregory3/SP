@@ -80,7 +80,7 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         // Comment this line out after you create a developer user in your local database
         // TODO Going to implement creation of developer users in the developer pages.
-        values.put(DbContract.UserEntry.COLUMN_USER_ISDEVELOPER, 1);
+        // values.put(DbContract.UserEntry.COLUMN_USER_ISDEVELOPER, 1);
 
         val newRowId = db.insert(DbContract.UserEntry.TABLE_NAME, null, values)
 

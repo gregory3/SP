@@ -1,5 +1,12 @@
-# SEProject-GroceryGuru
-My senior project for WIT SE class with group.
+***Introduction***
+My senior project for WIT SE class with group. Grocery Guru is an Android application where users can create grocery lists and find the best prices for their shopping carts. The application will use their location (if they allow it) to find grocery stores nearest to them, and find the items from their list and return the cheapest price of the local stores. 
+
+***Features***
+UC-1: Register -> register user for ability to save and reuse lists
+UC-2: Location -> return current location to user once user is created  
+UC-3: Create -> to create a new shopping list
+UC-4: Retrieve -> reuse saved shopping lists
+UC-6 Return -> return a list with costs
 
 ***FIRST STEPS***
 Clone the repo:
@@ -27,3 +34,12 @@ Clone the repo:
 * Merge conflicts will happen, and it's a good thing to know how to handle those. Merge conflicts happen when a a file is modified by     two different developers.
 * You have to solve this before any pulling or pushing happens, and a lot of git tools will have built in merge conflict resolution.
 * Just make sure you don't overwrite what the other person did
+
+***Demo Video***
+https://www.youtube.com/watch?v=aXGmeLbDL4Y
+
+***Contributors***
+* Sam Partlow
+* Evan Goyuk
+* Greg Cunningham
+* Nick Gallo

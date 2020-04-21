@@ -1,10 +1,19 @@
-# SEProject-GroceryGuru
-My senior project for WIT SE class with group.
+***Introduction***
+My senior project for WIT SE class with group. Grocery Guru is an Android application where users can create grocery lists and find the best prices for their shopping carts. The application will use their location (if they allow it) to find grocery stores nearest to them, and find the items from their list and return the cheapest price of the local stores. 
+
+***Features***
+UC-1: Register -> register user for ability to save and reuse lists
+UC-2: Location -> return current location to user once user is created  
+UC-3: Create -> to create a new shopping list
+UC-4: Retrieve -> reuse saved shopping lists
+UC-6 Return -> return a list with costs
 
 ***FIRST STEPS***
 Clone the repo:
 * Hit the clone or download button on the right hand side, and then copy the url.
+
 * Go to your git management app (I use SourceTree, that's the one I'm most comfortable with), and there should be somewhere where you can     either clone, add, or create a local repository. You want to clone this repo, so hit clone. In SourceTree, when originally cloning the project, there is an advanced options tab. Click this and then select the repo you want to push to.
+
 * Next it will have you enter the url you copied, along with where you want the repository to be in your file system. Put it wherever you     want and any other information you need to input and clone.
 * Once it is cloned, you will be on the master branch, you do ***NOT*** want to be on the master branch, the master branch is where we will   put things when the sprint is completed.
 * Somewhere in your app you will see a place to view remote branches. Find this place, and look for a branch with your name on it.
@@ -25,3 +34,12 @@ Clone the repo:
 * Merge conflicts will happen, and it's a good thing to know how to handle those. Merge conflicts happen when a a file is modified by     two different developers.
 * You have to solve this before any pulling or pushing happens, and a lot of git tools will have built in merge conflict resolution.
 * Just make sure you don't overwrite what the other person did
+
+***Demo Video***
+https://www.youtube.com/watch?v=aXGmeLbDL4Y
+
+***Contributors***
+* Sam Partlow
+* Evan Goyuk
+* Greg Cunningham
+* Nick Gallo

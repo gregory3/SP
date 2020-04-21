@@ -3,26 +3,115 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/login">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.groceryguruapp.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
+        android:id="@+id/login"
+        android:name="com.example.groceryguruapp.Login"
+        android:label="@string/login_label"
+        tools:layout="@layout/login">
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_login_to_homePage"
+            app:destination="@id/homePage" />
+        <action
+            android:id="@+id/action_login_to_createAccount"
+            app:destination="@id/createAccount" />
+        <action
+            android:id="@+id/action_login_to_developerHomePage"
+            app:destination="@id/developerHomePage" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createAccount"
+        android:name="com.example.groceryguruapp.CreateAccount"
+        android:label="create_account"
+        tools:layout="@layout/create_account">
+        <action
+            android:id="@+id/action_createAccount_to_homePage"
+            app:destination="@id/homePage" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createList"
+        android:name="com.example.groceryguruapp.CreateList"
+        android:label="fragment_create_list"
+        tools:layout="@layout/fragment_create_list" />
+
+    <fragment
+        android:id="@+id/homePage"
+        android:name="com.example.groceryguruapp.HomePage"
+        android:label="fragment_home_page"
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePage_to_createList"
+            app:destination="@id/createList" />
+        <action
+            android:id="@+id/action_homePage_to_profilePage"
+            app:destination="@id/profilePage" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.groceryguruapp.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
+        android:id="@+id/createUserDialog"
+        android:name="com.example.groceryguruapp.CreateUserDialog"
+        android:label="CreateUserDialog" >
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_createUserDialog_to_login"
+            app:destination="@id/login" />
     </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.groceryguruapp.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/displayDatabaseInformation"
+        android:name="com.example.groceryguruapp.DisplayDatabaseInformation"
+        android:label="fragment_display_database_information"
+        tools:layout="@layout/fragment_display_database_information" >
+        <action
+            android:id="@+id/action_displayDatabaseInformation_to_developerHomePage"
+            app:destination="@id/developerHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/developerHomePage"
+        android:name="com.example.groceryguruapp.DeveloperHomePage"
+        android:label="fragment_developer_home_page"
+        tools:layout="@layout/fragment_developer_home_page" >
+        <action
+            android:id="@+id/action_developerHomePage_to_displayDatabaseInformation"
+            app:destination="@id/displayDatabaseInformation" />
+        <action
+            android:id="@+id/action_developerHomePage_to_createGroceryItemsPage"
+            app:destination="@id/createGroceryItemsPage" />
+        <action
+            android:id="@+id/action_developerHomePage_to_homePage"
+            app:destination="@id/homePage" />
+        <action
+            android:id="@+id/action_developerHomePage_to_displayLists"
+            app:destination="@id/displayLists" />
+    </fragment>
+    <fragment
+        android:id="@+id/createGroceryItemsPage"
+        android:name="com.example.groceryguruapp.CreateGroceryItemsPage"
+        android:label="fragment_create_grocery_items_page"
+        tools:layout="@layout/fragment_create_grocery_items_page" >
+        <action
+            android:id="@+id/action_createGroceryItemsPage_to_developerHomePage"
+            app:destination="@id/developerHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/displayLists"
+        android:name="com.example.groceryguruapp.DisplayLists"
+        android:label="fragment_display_lists"
+        tools:layout="@layout/fragment_display_lists" >
+        <action
+            android:id="@+id/action_displayLists_to_developerHomePage"
+            app:destination="@id/developerHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilePage"
+        android:name="cpackage.ProfilePage"
+        android:label="ProfilePage" />
+    android:id="@+id/profilePage"
+        android:name="cpackage.ProfilePage"
+        android:label="fragment_profile_page" />
 </navigation>

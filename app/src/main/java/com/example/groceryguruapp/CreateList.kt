@@ -56,44 +56,55 @@ class CreateList : Fragment() {
             val items = dbHelper.searchItems(
                 view.findViewById<EditText>(R.id.productSearchTextView).text.toString().trim()
             )
-            val itemsList = ArrayList<String>(items.size)
-            val itemIds = ArrayList<String>(items.size)
-            for (i in items) {
-                itemsList.add("Item Name: " + i.itemname);
-                itemIds.add("" + i.itemid);
+            if (items == {}) {
+                Toast.makeText(
+                    context!!,
+                    "Please type something into search bar.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val itemsList = ArrayList<String>(items.size)
+                val itemIds = ArrayList<String>(items.size)
+                for (i in items) {
+                    itemsList.add("Item Name: " + i.itemname);
+                    itemIds.add("" + i.itemid);
+                }
+
+                val adapter =
+                    ArrayAdapter(context!!, android.R.layout.simple_list_item_1, itemsList)
+                view.findViewById<ListView>(R.id.itemSearchResultView).adapter = adapter
+
+
+                var listView = view.findViewById<ListView>(R.id.itemSearchResultView)
+                var adapterView = ArrayAdapter<String>(
+                    context!!,
+                    android.R.layout.simple_list_item_2,
+                    android.R.id.text1,
+                    itemsList
+                )
+
+                listView.adapter = adapter
+
+                listView.onItemClickListener =
+                    AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                        Toast.makeText(context!!, itemsList[i] + " selected", Toast.LENGTH_SHORT)
+                            .show()
+                        groceryList.add(itemIds[i])
+                    }
             }
 
-            val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, itemsList)
-            view.findViewById<ListView>(R.id.itemSearchResultView).adapter = adapter
+            view.findViewById<Button>(R.id.create_grocery_list_btn).setOnClickListener {
+                var ids = ByteArray(groceryList.size)
+                for (i in groceryList) {
+                    ids[0] = i.toByte()
+                }
+                groceryListObj = DbModels.GroceryList(0, ids)
+                val success = dbHelper.insertGroceryList(groceryListObj);
 
-
-            var listView = view.findViewById<ListView>(R.id.itemSearchResultView)
-            var adapterView = ArrayAdapter<String>(
-                context!!,
-                android.R.layout.simple_list_item_2,
-                android.R.id.text1,
-                itemsList
-            )
-
-            listView.adapter = adapter
-
-            listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
-                Toast.makeText(context!!, itemsList[i] + " selected", Toast.LENGTH_SHORT).show()
-                groceryList.add(itemIds[i])
-            }
-        }
-
-        view.findViewById<Button>(R.id.create_grocery_list_btn).setOnClickListener {
-            var ids = ByteArray(groceryList.size)
-            for (i in groceryList) {
-                ids[0] = i.toByte()
-            }
-            groceryListObj = DbModels.GroceryList(0, ids)
-            val success = dbHelper.insertGroceryList(groceryListObj);
-
-            if (success) {
-                Toast.makeText(context!!, "List Created", Toast.LENGTH_SHORT).show()
-                // in future implementations, we would invoke the api call to perform grocery item search
+                if (success) {
+                    Toast.makeText(context!!, "List Created", Toast.LENGTH_SHORT).show()
+                    // in future implementations, we would invoke the api call to perform grocery item search
+                }
             }
         }
     }

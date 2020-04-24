@@ -2,11 +2,11 @@
 My senior project for WIT SE class with group. Grocery Guru is an Android application where users can create grocery lists and find the best prices for their shopping carts. The application will use their location (if they allow it) to find grocery stores nearest to them, and find the items from their list and return the cheapest price of the local stores. 
 
 ***Features***
-UC-1: Register -> register user for ability to save and reuse lists
-UC-2: Location -> return current location to user once user is created  
-UC-3: Create -> to create a new shopping list
-UC-4: Retrieve -> reuse saved shopping lists
-UC-6 Return -> return a list with costs
+Register -> register user for ability to save and reuse lists
+Location -> return current location to user once user is created  
+Create -> to create a new shopping list
+Retrieve -> reuse saved shopping lists
+Return -> return a list with costs
 
 ***FIRST STEPS***
 Clone the repo:
